@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/root_view"
+    android:background="@color/add_first_guardian"
+    tools:context="ir.app.ensan.component.fragment.AddFirstGuardianFragment"
+    >
+
+  <ImageView
+      android:id="@+id/add_button"
+      android:layout_width="140dp"
+      android:layout_height="140dp"
+      android:scaleType="fitXY"
+      android:src="@drawable/plus"
+      android:layout_centerInParent="true"
+      />
+
+  <ir.app.ensan.component.view.CustomTextView
+      android:id="@+id/main_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/add_button"
+      android:layout_centerHorizontal="true"
+      android:paddingTop="8dp"
+      android:textSize="18sp"
+      android:textColor="@color/white"
+      android:text="@string/add_guardian_main_title1"
+      />
+
+  <ir.app.ensan.component.view.CustomTextView
+      android:id="@+id/sub_title2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_alignParentBottom="true"
+      android:paddingBottom="8dp"
+      android:paddingTop="8dp"
+      android:textSize="10sp"
+      android:textColor="@color/white"
+      android:singleLine="true"
+      android:text="@string/add_guardian_sub_title2"
+      />
+  <ir.app.ensan.component.view.CustomTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="8dp"
+      android:textSize="12sp"
+      android:textColor="@color/white"
+      android:text="@string/add_guardian_sub_title1"
+      android:id="@+id/customTextView"
+      android:layout_below="@+id/main_title"
+      android:layout_centerHorizontal="true"
+      />
+
+</RelativeLayout>

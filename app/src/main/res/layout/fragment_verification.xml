@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/contact_background"
+    tools:context="ir.app.ensan.component.fragment.VerificationFragment"
+    >
+
+  <ir.app.ensan.component.view.CustomEditText
+      android:id="@+id/sms_edit_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:hint="@string/sms_code"
+      android:textColor="@color/white"
+      android:layout_marginTop="32dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
+      android:gravity="center"
+      android:theme="@style/EditTextStyle"
+      />
+
+  <ir.app.ensan.component.view.CustomTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/sms_edit_text"
+      android:layout_centerHorizontal="true"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
+      android:layout_marginTop="16dp"
+      android:text="@string/verification_description"
+      android:gravity="center"
+      android:textSize="14sp"
+      android:textColor="@color/white"
+
+      />
+
+
+  <ir.app.ensan.component.view.CustomButton
+      android:id="@+id/send_button"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_alignParentBottom="true"
+      android:text="@string/retrieve"
+      android:singleLine="true"
+      android:textColor="@color/white"
+      android:background="@color/contact_button_background"
+      />
+</RelativeLayout>

@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+
+def versionMajor = 0
+def versionMinor = 9
+def versionPatch = 6
+def versionBuild = 0
+
+android {
+  compileSdkVersion 25
+  buildToolsVersion "25.0.3"
+  defaultConfig {
+    applicationId "ir.app.ensan"
+    minSdkVersion 16
+    targetSdkVersion 25
+
+    versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+    versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+    setProperty("archivesBaseName", "Ensan-$versionName")
+
+    if (project.hasProperty("STG")) {
+      buildConfigField "boolean", "STG", "${project.property("STG")}"
+    }
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+
+
+ext {
+  SUPPORT_LIBRARY_VERSION = '25.3.1'
+  GOOGLE_FIREBASE_VERSION = '10.2.4'
+  PICASSO_VERSION = '2.5.2'
+  RETROFIT_VERSION = '2.0.1'
+  RETROFIT_GSON_VERSION = '2.0.1'
+  OKHTTP_VERSION = '3.2.0'
+  OKHTTP_LOG_VERSION = '3.2.0'
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
+  compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+  compile "com.android.support:support-v4:${SUPPORT_LIBRARY_VERSION}"
+  compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
+  compile "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
+
+  compile "com.squareup.picasso:picasso:${PICASSO_VERSION}"
+  compile "com.google.firebase:firebase-core:${GOOGLE_FIREBASE_VERSION}"
+  compile "com.google.firebase:firebase-messaging:${GOOGLE_FIREBASE_VERSION}"
+
+  compile "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
+  compile "com.squareup.retrofit2:converter-gson:${RETROFIT_GSON_VERSION}"
+  compile "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
+  compile "com.squareup.okhttp3:logging-interceptor:${OKHTTP_LOG_VERSION}"
+  compile 'com.afollestad.material-dialogs:commons:0.9.1.0'
+  compile 'com.android.support:support-v4:25.3.1'
+}
+
+apply plugin: 'com.google.gms.google-services'

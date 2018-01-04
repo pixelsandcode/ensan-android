@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="oval">
+      <stroke
+          android:color="@color/white"
+          android:width="2dp"/>
+      <solid
+          android:color="@color/white"
+          />
+    </shape>
+  </item>
+
+  <item>
+    <bitmap
+        android:src="@drawable/alamat_taajob" />
+  </item>
+
+  <!--<item android:drawable="@drawable/checkmark"/>-->
+</layer-list>

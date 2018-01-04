@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/contact_background"
+    tools:context="ir.app.ensan.component.fragment.AddUserFragment"
+    >
+
+  <ir.app.ensan.component.view.CustomEditText
+      android:id="@+id/user_name_edit_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:hint="@string/user_name_hint"
+      android:textColor="@color/white"
+      android:layout_marginTop="32dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
+      android:gravity="center"
+      android:theme="@style/EditTextStyle"
+      />
+
+  <ir.app.ensan.component.view.CustomEditText
+      android:id="@+id/user_phone_edit_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_below="@+id/user_name_edit_text"
+      android:hint="@string/user_phone_hint"
+      android:textColor="@color/white"
+      android:layout_marginTop="24dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
+      android:inputType="phone"
+      android:gravity="center"
+      android:singleLine="true"
+      android:theme="@style/EditTextStyle"
+      />
+
+  <ir.app.ensan.component.view.CustomButton
+      android:id="@+id/send_button"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_alignParentBottom="true"
+      android:text="@string/send"
+      android:singleLine="true"
+      android:textColor="@color/white"
+      android:background="@color/contact_button_background"
+      />
+
+</RelativeLayout>

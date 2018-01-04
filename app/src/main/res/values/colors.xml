@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="colorPrimary">#3F51B5</color>
+  <color name="colorPrimaryDark">#303F9F</color>
+  <color name="colorAccent">#FF4081</color>
+
+  <color name="add_first_guardian">#d32f2e</color>
+  <color name="add_second_guardian">#f5511e</color>
+  <color name="add_third_guardian">#1c89e4</color>
+  <color name="contact_background">#41a045</color>
+  <color name="contact_button_background">#00701a</color>
+
+  <color name="black">#000000</color>
+  <color name="white">#FFFFFF</color>
+  <color name="white_transparent">#60FFFFFF</color>
+
+</resources>

@@ -1,0 +1,91 @@
+<resources>
+  <string name="app_name">انسان</string>
+  <string name="app_description">کمک یار بحران زلزله</string>
+  <string name="earth_quick_radar">رادار زمین لرزه</string>
+  <string name="intro_1_main_title">با یک دکمه</string>
+  <string name="intro_1_sub_title">آشنایان را از نگرانی دربیارید</string>
+  <string name="intro_2_main_title">ارسال رایگان سیگنال</string>
+  <string name="intro_3_sub_title">سلامت یا جراحت بعد از وقوع زلزله</string>
+  <string name="enter_to_app">ورود به برنامه</string>
+
+  <string name="add_guardian_main_title1">افزودن فامیل و دوستان نزدیک</string>
+  <string name="add_guardian_sub_title1">افزودن کسانی که شما برایشان مهم هستید</string>
+  <string name="invitation_message">سلام لطفاً برنامه ی Ensan رو دانلود کن. من شما رو به عنوان سرپرست خودم معرفی کردم تا در صورت زمین لرزه یا بروز حادثه از سلامت من با خبر باشید.\hhttp://ensanapp.ir\n</string>
+  <string name="sms_code">کد SMS</string>
+
+  <string name="add_guardian_main_title2">مشاهده ی لیست آشنایان</string>
+
+  <string name="contact_permission_description">ما برای اطلاع وضعییت شما به خانواده و آشنایان تان نیاز به شماره تلفن آن ها داریم</string>
+  <string name="call_permission_description">لطفاً برای برقرای تماس در زمان اضطراری، اجازه ی تماس بدهید</string>
+  <string name="verification_description">حساب کاربری با این شماره وجود دارد. برای درسترسی لطفاً کد ارسال شده از طریق SMS را وارد کنید</string>
+  <string name="send_sms_description">لطفاً برای اطلاع سرپرستان خود به آن ها پیامک ارسال کنید</string>
+  <string name="resend_sms_description">%S هنوز به درخواست شما پاسخ نداده است. برای او دوباره پیام بفرستید</string>
+  <string name="add_guardian_sub_title2">برای اطمینان خاطر حداقل %d نفر دیگر را اضافه کنید</string>
+  <string name="add_first_guardian_sub_title2">کسی از شما با خبر نخواهد شد</string>
+  <string name="add_guardian">افزودن سرپرست</string>
+  <string name="home_sub_title2">شما %d نفر افزوده اید</string>
+  <string name="phone_number_not_valid">شماره ی تلفن همراه معتبر نیست</string>
+
+  <string name="contact_sms_sent">پیام شما به %s ارسال شد</string>
+  <string name="contact_sms_not_sent">پیام شما به %s ارسال شد</string>
+  <string name="user_status_safe">پیام سلامت شما ارسال شد</string>
+  <string name="user_status_in_danger">پیام کمک شما ارسال شد</string>
+  <string name="notified_safe_status_count">%d نفر از سلامت شما مطلع شدند</string>
+  <string name="notified_danger_status_count">%d نفر از حادثه شما مطلع شدند </string>
+
+  <string name="guardian_not_answer_yet">هنوز جواب نداده</string>
+  <string name="select_one_at_least">حداقل یک مخاطب انتخاب کنید</string>
+  <string name="please_finish_sign_up">لطفاً ثبت نام خود را تکمیل کنید</string>
+  <string name="please_enter_your_name">لطفاً نام کامل خود را وارد کنید</string>
+  <string name="please_enter_your_phone_number">لطفاً شماره تلفن خود را وارد کنید</string>
+
+  <string name="user_name_hint">نام کامل شما</string>
+  <string name="user_phone_hint">شماره موبایل</string>
+
+  <string name="confirm">تایید</string>
+  <string name="understood">متوجه شدم</string>
+  <string name="send">ارسال</string>
+  <string name="send_again">ارسال مجدد</string>
+  <string name="retrieve">بازیابی</string>
+
+  <string name="safe">خوبم</string>
+  <string name="damage">در خطرم</string>
+
+  <string name="perv">قبلی</string>
+  <string name="next">بعدی</string>
+
+  <string name="is_safe">سالم است</string>
+  <string name="safe_description" formatted="false">%1s می گوید در ساعت %2s سالم است</string>
+  <string name="in_danger_description" formatted="false">%1s می گویید در ساعت %2s در خطر است</string>
+  <string name="in_danger">در خطر است</string>
+
+  <string name="warning">هشدار</string>
+  <string name="no_guardian_warning">شما هیچ کس را به عنوان سرپرست خود انتخاب نکرده اید</string>
+  <string name="pending_guardian_warning">تعدادی از سرپرستان هنوز به در خواست شما پاسخ نداده اند برای مشاهده کلیک کنید</string>
+
+  <string name="send_in_danger_status_warning">شما در حال ارسال یک پیام هشدار برای سرپرستان خود هستید. آیا از ارسال پیام اطمینان دارید؟</string>
+
+  <string name="no_contact_exist">هیچ مخاطبی برای سرپرستی وجود ندارد</string>
+  <string name="please_wait">لطفاً کمی صبر کنید</string>
+
+  <string name="internet_disconnect">اتصال خود به اینترنت را بررسی کنید</string>
+  <string name="network_setting">تنظیمات شبکه</string>
+
+  <string name="call">تماس</string>
+  <string name="cancel">انصراف</string>
+  <string name="ok">تایید</string>
+
+  <string-array name="main_titles">
+    <item>انسان</item>
+    <item>با یک دکمه</item>
+    <item>ارسال رایگان سیگنال</item>
+  </string-array>
+
+  <string-array name="sub_titles">
+    <item>کمک یار بحران زلزله</item>
+    <item>آشنایان را از نگرانی در بیارید</item>
+    <item>سلامت یا جراحت بعد از وقوع زلزله</item>
+  </string-array>
+
+
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="vertical"
+    >
+
+  <RelativeLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="16dp"
+      android:layout_toLeftOf="@+id/invitation_check_box"
+      android:orientation="vertical"
+      android:id="@+id/relativeLayout"
+      >
+
+    <ir.app.ensan.component.view.CustomTextView
+        android:id="@+id/contact_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/white"
+        android:text="csdcsdvsvssd"
+        android:textSize="18sp"
+        />
+
+    <ir.app.ensan.component.view.CustomTextView
+        android:id="@+id/contact_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/contact_name"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/white"
+        android:text="09354614715"
+        android:textSize="12sp"
+        />
+  </RelativeLayout>
+
+  <ir.app.ensan.component.view.CustomTextView
+      android:id="@+id/guardian_not_answer_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:textColor="@color/white"
+      android:textSize="14sp"
+      android:layout_marginLeft="8dp"
+      android:text="@string/guardian_not_answer_yet"
+      />
+  <android.support.v7.widget.AppCompatCheckBox
+      android:id="@+id/invitation_check_box"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      app:buttonTint="@color/white"
+      android:layout_marginRight="4dp"
+      android:button="@null"
+      android:background="@drawable/invitation_checkbox_selector"
+      android:layout_alignTop="@+id/relativeLayout"
+      android:enabled="false"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      />
+
+</RelativeLayout>

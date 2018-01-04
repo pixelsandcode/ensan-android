@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/contact_background"
+    tools:context="ir.app.ensan.component.fragment.SelectContactFragment"
+    >
+
+  <ir.app.ensan.component.view.CustomRecycleView
+      android:id="@+id/contact_recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="50dp"/>
+
+  <ir.app.ensan.component.view.CustomTextView
+      android:id="@+id/contact_empty_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="@string/no_contact_exist"
+      app:font_type="bold"
+      />
+
+  <ir.app.ensan.component.view.CustomButton
+      android:id="@+id/confirm_button"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_alignParentBottom="true"
+      android:text="@string/confirm"
+      android:textColor="@color/white"
+      android:background="@color/contact_button_background"
+      />
+
+</RelativeLayout>
