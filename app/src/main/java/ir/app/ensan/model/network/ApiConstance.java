@@ -6,7 +6,7 @@ package ir.app.ensan.model.network;
 
 public class ApiConstance {
 
-  public static final String HOST_URL = "http://192.168.0.109:3100/v1/";
+  public static final String HOST_URL = "http://api.ensanapp.ir/v1/";
 
   public static final String SIGNUP_API = "user/signup";
   public static final String LOGIN_API = "user/login";

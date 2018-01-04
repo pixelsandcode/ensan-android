@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import ir.app.ensan.BuildConfig;
 import ir.app.ensan.R;
 import ir.app.ensan.component.activity.AddGuardianActivity;
 import ir.app.ensan.component.view.CustomButton;
@@ -88,7 +89,11 @@ public class AddUserFragment extends BaseFragment {
       phoneNumber = "+98" + phoneNumber;
     }
 
-    Toast.makeText(getActivity(), "phone number To save " + phoneNumber, Toast.LENGTH_LONG).show();
+    if (BuildConfig.STG) {
+      Toast.makeText(getActivity(), "phone number To save " + phoneNumber, Toast.LENGTH_LONG)
+          .show();
+    }
+
     SharedPreferencesUtil.saveString(USER_NAME_KEY, userName);
     SharedPreferencesUtil.saveString(PHONE_NUMBER_KEY, phoneNumber);
 
