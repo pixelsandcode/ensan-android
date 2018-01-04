@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
-import retrofit2.Response;
 
 /**
  * Created by k.monem on 6/2/2016.
@@ -58,7 +57,7 @@ public class NetworkUtil {
 
     try {
       error = converter.convert(errorBody);
-    } catch (IOException e) {
+    } catch (Exception e) {
       return new BaseResponse();
     }
 

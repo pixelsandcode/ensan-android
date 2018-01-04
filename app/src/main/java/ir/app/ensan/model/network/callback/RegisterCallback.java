@@ -1,5 +1,6 @@
 package ir.app.ensan.model.network.callback;
 
+import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.response.BaseResponse;
 import ir.app.ensan.util.NetworkUtil;
 import java.net.SocketTimeoutException;
@@ -31,33 +32,10 @@ public abstract class RegisterCallback<T> implements Callback<T> {
         return;
       }
       onRequestFail(call, response);
-      //switch (baseResponse.getStatusCode()) {
-      //
-      //    case 13: //card data invalid
-      //        onAuthenticationReject(call, response);
-      //        return;
-      //    case 33: //invalid password
-      //        onAuthenticationReject(call, response);
-      //        return;
-      //    case 67: // session expired
-      //        onSessionIdExpired(call, response);
-      //        return;
-      //    case 150://password must change
-      //        onPasswordExpired(call, response);
-      //        return;
-      //    case 151: // username and phone number not match
-      //        onAuthenticationReject(call, response);
-      //        return;
-      //    case 1000: // UnHandled exception
-      //        onRequestFail(call, response);
-      //        return;
-      //    default: // other errors
-      //        onRequestFail(call, response);
-      //        return;
-      //}
     }
 
     baseResponse = (BaseResponse) response.body();
+    NetworkRequestManager.getInstance().saveAuthorizationKey(response);
     onRequestSuccess(call, response);
   }
 
