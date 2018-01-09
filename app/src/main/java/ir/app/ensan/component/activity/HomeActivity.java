@@ -20,6 +20,7 @@ import ir.app.ensan.component.fragment.UserStatusFragment;
 import ir.app.ensan.component.service.AppMessagingIdService;
 import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.model.network.NetworkRequestManager;
+import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.request.NotifyRequest;
 import ir.app.ensan.model.network.response.NotifyResponse;
@@ -51,8 +52,7 @@ public class HomeActivity extends BaseActivity {
     openMainFragment();
     checkCallPermission();
     sendNotificationToken();
-
-}
+  }
 
   @Override public void setListeners() {
     super.setListeners();
@@ -146,46 +146,60 @@ public class HomeActivity extends BaseActivity {
 
   public void sendNotificationToken() {
 
-    NetworkRequestManager.getInstance()
-        .callAddDevice(
-            SharedPreferencesUtil.loadString(AppMessagingIdService.NOTIFICATION_TOKEN_KEY, ""),
-            new AppCallback() {
-              @Override public void onRequestSuccess(Call call, Response response) {
-               // AddDeviceResponse addDeviceResponse = (AddDeviceResponse) response.body();
+    String token =
+        SharedPreferencesUtil.loadString(AppMessagingIdService.NOTIFICATION_TOKEN_KEY, "");
 
-                //if (!addDeviceResponse.getData().getSuccess()) {
-                //  sendNotificationToken();
-                //} else {
-                //  SharedPreferencesUtil.saveBoolean(
-                //      AppMessagingIdService.NOTIFICATION_TOKEN_CHANGE_KEY, false);
-                //}
-              }
+    if (token.isEmpty()) {
+      return;
+    }
 
-              @Override public void onRequestFail(Call call, Response response) {
+    NetworkRequestManager.getInstance().callAddDevice(token, new AppCallback() {
+      @Override public void onRequestSuccess(Call call, Response response) {
+        // AddDeviceResponse addDeviceResponse = (AddDeviceResponse) response.body();
 
-              }
+        //if (!addDeviceResponse.getData().getSuccess()) {
+        //  sendNotificationToken();
+        //} else {
+        //  SharedPreferencesUtil.saveBoolean(
+        //      AppMessagingIdService.NOTIFICATION_TOKEN_CHANGE_KEY, false);
+        //}
+      }
 
-              @Override public void onRequestTimeOut(Call call, Throwable t) {
+      @Override public void onRequestFail(Call call, Response response) {
 
-              }
+      }
 
-              @Override public void onNullResponse(Call call) {
+      @Override public void onRequestTimeOut(Call call, Throwable t) {
 
-              }
-            });
+      }
+
+      @Override public void onNullResponse(Call call) {
+
+      }
+    });
   }
 
   public void sendGuardianData() {
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callAddGuardian(selectedContactEntity.getName(), selectedContactEntity.getPhoneNumber(),
-            new AppCallback() {
+            new AddGuardianCallback() {
               @Override public void onRequestSuccess(Call call, Response response) {
                 dismissProgressDialog();
                 ContactManager.getInstance(HomeActivity.this)
                     .addSelectedContact(selectedContactEntity);
                 ContactManager.getInstance(HomeActivity.this).saveContacts();
                 checkSmsPermission();
+              }
+
+              @Override public void onGuardianAddBefore(Call call, Response response) {
+                dismissProgressDialog();
+                SnackUtil.makeSnackBar(HomeActivity.this, getWindow().getDecorView(),
+                    Snackbar.LENGTH_INDEFINITE, getString(R.string.duplicate_guardian), true,
+                    getString(R.string.understood), new View.OnClickListener() {
+                      @Override public void onClick(View view) {
+                      }
+                    });
               }
 
               @Override public void onRequestFail(Call call, Response response) {

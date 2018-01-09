@@ -14,6 +14,7 @@ import ir.app.ensan.R;
 import ir.app.ensan.component.activity.HomeActivity;
 import ir.app.ensan.component.activity.SplashActivity;
 import ir.app.ensan.component.receiver.NotificationReceiver;
+import ir.app.ensan.util.TimeUtil;
 
 /**
  * Created by k.monem on 9/22/2016.
@@ -75,7 +76,11 @@ public class NotificationManager {
     notificationManager.notify((int) notificationId, notification);
   }
 
-  public void firePendingGuardianNotification() {
+  public void firePendingGuardianNotification(String text) {
+
+    if (text.isEmpty()){
+      return;
+    }
 
     Intent intent = new Intent(context, HomeActivity.class);
 
@@ -86,7 +91,7 @@ public class NotificationManager {
 
     Notification.Builder notificationBuilder =
         new Notification.Builder(context).setContentTitle(context.getString(R.string.warning))
-            .setContentText(context.getString(R.string.pending_guardian_warning))
+            .setContentText(text)
             .setSmallIcon(
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.mipmap.ic_launcher
                     : R.mipmap.ic_launcher)
@@ -97,8 +102,7 @@ public class NotificationManager {
             .setContentIntent(pendingIntent);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      notificationBuilder.setStyle(
-          new Notification.BigTextStyle().bigText(context.getString(R.string.no_guardian_warning)));
+      notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(text));
       notification = notificationBuilder.build();
     } else {
       notification = notificationBuilder.getNotification();
@@ -154,7 +158,7 @@ public class NotificationManager {
         PendingIntent.getActivity(context, 0, phoneCall, PendingIntent.FLAG_CANCEL_CURRENT);
 
     notificationBuilder.addAction(android.R.drawable.ic_menu_call,
-        context.getString(R.string.network_setting), phoneCallIntent);
+        context.getString(R.string.call), phoneCallIntent);
     // notificationBuilder.addAction(android.R.drawable.ic_menu_mapmode, "Show Map", null);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -182,11 +186,11 @@ public class NotificationManager {
   }
 
   private String getSafeNotificationTitle(String name) {
-    return name + context.getString(R.string.is_safe);
+    return name +" "+ context.getString(R.string.is_safe);
   }
 
   private String getSafeNotificationBody(String name, String time) {
-    return String.format(context.getString(R.string.safe_description), name, time);
+    return String.format(context.getString(R.string.safe_description), name, parseDate(time));
   }
 
   private String getWarningNotificationTitle() {
@@ -194,10 +198,15 @@ public class NotificationManager {
   }
 
   private String getWarningNotificationBody(String name, String time) {
-    return String.format(context.getString(R.string.in_danger_description), name, time);
+    return String.format(context.getString(R.string.in_danger_description), name, parseDate(time));
+  }
+
+  private String parseDate(String dateString){
+    return TimeUtil.getFormattedDate(dateString);
   }
 
   private int getNotificationId() {
     return (int) System.currentTimeMillis();
   }
+
 }

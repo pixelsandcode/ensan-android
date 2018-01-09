@@ -62,7 +62,8 @@ public class ContactManager {
 
     while (cursor.moveToNext()) {
 
-      int phoneType = cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+      int phoneType =
+          cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
       if (phoneType != ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
         continue;
       }
@@ -73,10 +74,13 @@ public class ContactManager {
               cursor.getString(
                   cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
 
-      LogUtil.logI("phone type",contactEntity.getPhoneNumber()+ " "+phoneType);
+      LogUtil.logI("phone type", contactEntity.getPhoneNumber() + " " + phoneType);
       if (contactAlreadyExist(contactEntity.getPhoneNumber())) {
         continue;
       }
+
+      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("\\s+",""));
+      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("[\\s\\-()]",""));
       contactEntities.add(contactEntity);
     }
     cursor.close();
@@ -135,23 +139,22 @@ public class ContactManager {
     return selectedContacts != null && !selectedContacts.isEmpty();
   }
 
-  public void getGuardianSize(){
+  public Set<ContactEntity> getGuardians() {
+    loadContacts();
+    return selectedContacts;
+  }
+  public void getGuardianSize() {
     selectedContacts.size();
   }
 
-
-
-  public void sendMessage(ContactEntity contactEntity,SmsListener smsListener) {
+  public void sendMessage(ContactEntity contactEntity, SmsListener smsListener) {
     try {
       SmsManager smsManager = SmsManager.getDefault();
-      smsManager.sendTextMessage(contactEntity.getPhoneNumber(), null, context.getString(R.string.invitation_message), null, null);
-      //Toast.makeText(EnsanApp.getAppContext(), "Message Sent",
-      //    Toast.LENGTH_LONG).show();
+      smsManager.sendTextMessage(contactEntity.getPhoneNumber(), null,
+          context.getString(R.string.invitation_message), null, null);
       smsListener.onSmsSent(contactEntity);
     } catch (Exception ex) {
-      //smsListener.onSmsNotSent(contactEntity);
-      //Toast.makeText(EnsanApp.getAppContext(),ex.getMessage().toString(),
-      //    Toast.LENGTH_LONG).show();
+      smsListener.onSmsNotSent(contactEntity);
       ex.printStackTrace();
     }
   }

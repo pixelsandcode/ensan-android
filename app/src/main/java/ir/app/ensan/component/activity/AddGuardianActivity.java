@@ -23,6 +23,7 @@ import ir.app.ensan.component.fragment.SelectContactFragment;
 import ir.app.ensan.component.fragment.VerificationFragment;
 import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.model.network.NetworkRequestManager;
+import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
 import ir.app.ensan.model.network.response.LoginResponse;
@@ -55,6 +56,7 @@ public class AddGuardianActivity extends BaseActivity {
 
   private boolean firstTransaction = true;
   private boolean registerComplete = false;
+  private boolean login = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -183,6 +185,7 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   public void loginUser() {
+    login = true;
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
@@ -221,10 +224,21 @@ public class AddGuardianActivity extends BaseActivity {
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callAddGuardian(selectedContactEntity.getName(), selectedContactEntity.getPhoneNumber(),
-            new AppCallback() {
+            new AddGuardianCallback() {
               @Override public void onRequestSuccess(Call call, Response response) {
                 dismissProgressDialog();
                 checkSmsPermission();
+              }
+
+              @Override public void onGuardianAddBefore(Call call, Response response) {
+                dismissProgressDialog();
+                SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
+                    getString(R.string.duplicate_guardian), true, getString(R.string.understood),
+                    new View.OnClickListener() {
+                      @Override public void onClick(View view) {
+                        checkSmsPermission();
+                      }
+                    });
               }
 
               @Override public void onRequestFail(Call call, Response response) {

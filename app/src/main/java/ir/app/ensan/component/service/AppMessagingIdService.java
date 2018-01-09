@@ -20,12 +20,9 @@ public class AppMessagingIdService extends FirebaseInstanceIdService {
     // Get updated InstanceID token.
     String refreshedToken = FirebaseInstanceId.getInstance().getToken();
     Log.d(TAG, "Refreshed token: " + refreshedToken);
-    String currentToken = SharedPreferencesUtil.loadString(NOTIFICATION_TOKEN_KEY,"");
 
-    if (!refreshedToken.equals(currentToken)){
-      SharedPreferencesUtil.saveString(NOTIFICATION_TOKEN_KEY, refreshedToken);
-      SharedPreferencesUtil.saveBoolean(NOTIFICATION_TOKEN_CHANGE_KEY, true);
-    }
+    SharedPreferencesUtil.saveString(NOTIFICATION_TOKEN_KEY, refreshedToken);
+    SharedPreferencesUtil.saveBoolean(NOTIFICATION_TOKEN_CHANGE_KEY, true);
 
     // If you want to send messages to this application instance or
     // manage this apps subscriptions on the server side, send the

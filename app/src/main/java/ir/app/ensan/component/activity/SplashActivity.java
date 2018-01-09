@@ -54,8 +54,8 @@ public class SplashActivity extends BaseActivity {
 
     NotificationManager.getInstance().scheduleNotification(BuildConfig.STG?
         TimeUtil.getCurrentDate()+10000 : TimeUtil.addDayFromNow(1));// first day
-    NotificationManager.getInstance().scheduleNotification(TimeUtil.addDayFromNow(3));// first day
-    NotificationManager.getInstance().scheduleNotification(TimeUtil.addDayFromNow(7));// first day
+    NotificationManager.getInstance().scheduleNotification(TimeUtil.addDayFromNow(3));// 3 day later
+    NotificationManager.getInstance().scheduleNotification(TimeUtil.addDayFromNow(7));// 7 day later
   }
 
   private Runnable runnable = new Runnable() {

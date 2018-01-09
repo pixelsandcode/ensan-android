@@ -46,11 +46,10 @@ public class AppMessagingService extends IntentService {
         break;
 
       case "notifyInviter":
-        NotificationManager.getInstance().firePendingGuardianNotification();
+        NotificationManager.getInstance()
+            .firePendingGuardianNotification(notificationData.getString("text"));
         break;
-      default: // transaction notification
-        //                NotificationManager.getInstance().fireTransactionNotification(notificationType,
-        //                        notificationData.getString("token"));
+      default:
         break;
     }
 

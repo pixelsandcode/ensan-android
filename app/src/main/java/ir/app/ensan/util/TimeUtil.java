@@ -1,5 +1,6 @@
 package ir.app.ensan.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -9,7 +10,7 @@ import java.util.TimeZone;
  */
 public class TimeUtil {
 
-  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
   private static final String TIME_FORMAT_PATTERN = "HH:mm";
   public static TimeZone iranTimeZone;
   private static SimpleDateFormat dateFormat;
@@ -23,6 +24,15 @@ public class TimeUtil {
 
   public static String getFormattedTime(Date date) {
     return timeFormat.format(date);
+  }
+
+  public static String getFormattedDate(String date) {
+    try {
+      return getFormattedTime(dateFormat.parse(date));
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return date;
   }
 
   public static long getCurrentDate() {
