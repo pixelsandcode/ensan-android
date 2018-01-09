@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.afollestad.materialdialogs.MaterialDialog;
 import ir.app.ensan.R;
+import ir.app.ensan.common.FirebaseAnalyticManager;
 import ir.app.ensan.component.abstraction.AbstractFragment;
 
 /**
@@ -40,6 +41,7 @@ public abstract class BaseFragment extends Fragment implements AbstractFragment 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     mainView = view;
+    FirebaseAnalyticManager.getInstance(getActivity()).sendFragmentViewEvent(this);
     registerWidgets();
     getExtra();
     setListeners();
@@ -50,10 +52,11 @@ public abstract class BaseFragment extends Fragment implements AbstractFragment 
         .build();
   }
 
-  public void showProgressDialog(){
+  public void showProgressDialog() {
     progressDialog.show();
   }
-  public void dismissProgressDialog(){
+
+  public void dismissProgressDialog() {
     progressDialog.dismiss();
   }
 

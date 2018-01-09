@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import com.afollestad.materialdialogs.MaterialDialog;
 import ir.app.ensan.R;
+import ir.app.ensan.common.FirebaseAnalyticManager;
 import ir.app.ensan.component.abstraction.AbstractActivity;
 
 /**
@@ -36,12 +37,19 @@ public abstract class BaseActivity extends AppCompatActivity implements Abstract
         .cancelable(false)
         .progress(true, 0)
         .build();
+
+    FirebaseAnalyticManager.getInstance(this).sendActivityViewEvent(this);
   }
 
-  public void showProgressDialog(){
+  @Override protected void onResume() {
+    super.onResume();
+  }
+
+  public void showProgressDialog() {
     progressDialog.show();
   }
-  public void dismissProgressDialog(){
+
+  public void dismissProgressDialog() {
     progressDialog.dismiss();
   }
 
@@ -60,7 +68,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Abstract
   @Override protected void onRestart() {
     super.onRestart();
   }
-
 
   @Override public void registerWidgets() {
 

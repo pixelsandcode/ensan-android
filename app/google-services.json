@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "55775082972",
-    "firebase_url": "https://test-eb715.firebaseio.com",
-    "project_id": "test-eb715",
-    "storage_bucket": "test-eb715.appspot.com"
+    "project_number": "123982816210",
+    "firebase_url": "https://ensan-191605.firebaseio.com",
+    "project_id": "ensan-191605",
+    "storage_bucket": "ensan-191605.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:55775082972:android:7fe80192e89d25fd",
+        "mobilesdk_app_id": "1:123982816210:android:7fe80192e89d25fd",
         "android_client_info": {
           "package_name": "ir.app.ensan"
         }
       },
       "oauth_client": [
         {
-          "client_id": "55775082972-la0vp9hbi5omdpdj8q12aif6u1u69n55.apps.googleusercontent.com",
+          "client_id": "123982816210-f5kfi6nhqpno6gtivuje8p7it3cv0ubk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
