@@ -221,6 +221,7 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   public void sendGuardianData() {
+
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callAddGuardian(selectedContactEntity.getName(), selectedContactEntity.getPhoneNumber(),

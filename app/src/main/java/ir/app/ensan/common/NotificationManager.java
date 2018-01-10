@@ -9,12 +9,15 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import ir.app.ensan.EnsanApp;
 import ir.app.ensan.R;
 import ir.app.ensan.component.activity.HomeActivity;
 import ir.app.ensan.component.activity.SplashActivity;
 import ir.app.ensan.component.receiver.NotificationReceiver;
 import ir.app.ensan.util.TimeUtil;
+import java.util.ArrayList;
 
 /**
  * Created by k.monem on 9/22/2016.
@@ -76,9 +79,9 @@ public class NotificationManager {
     notificationManager.notify((int) notificationId, notification);
   }
 
-  public void firePendingGuardianNotification(String text) {
+  public void firePendingGuardianNotification(String pendingNames) {
 
-    if (text.isEmpty()){
+    if (pendingNames.isEmpty()){
       return;
     }
 
@@ -91,7 +94,7 @@ public class NotificationManager {
 
     Notification.Builder notificationBuilder =
         new Notification.Builder(context).setContentTitle(context.getString(R.string.warning))
-            .setContentText(text)
+            .setContentText(getPendingGuardianNotificationBody(pendingNames))
             .setSmallIcon(
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.mipmap.ic_launcher
                     : R.mipmap.ic_launcher)
@@ -102,7 +105,8 @@ public class NotificationManager {
             .setContentIntent(pendingIntent);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(text));
+      notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(
+          getPendingGuardianNotificationBody(pendingNames)));
       notification = notificationBuilder.build();
     } else {
       notification = notificationBuilder.getNotification();
@@ -199,6 +203,19 @@ public class NotificationManager {
 
   private String getWarningNotificationBody(String name, String time) {
     return String.format(context.getString(R.string.in_danger_description), name, parseDate(time));
+  }
+
+  private String getPendingGuardianNotificationBody(String pendingNames) {
+
+    StringBuilder nameString = new StringBuilder("");
+    ArrayList<String> names = new Gson().fromJson(pendingNames, new TypeToken<ArrayList<String>>() {
+    }.getType());
+
+    for (String name : names){
+      nameString.append(name).append(" ");
+    }
+
+    return String.format(context.getString(R.string.pending_guardian_warning), nameString.toString());
   }
 
   private String parseDate(String dateString){

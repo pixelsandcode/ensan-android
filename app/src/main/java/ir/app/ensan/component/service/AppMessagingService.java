@@ -47,7 +47,7 @@ public class AppMessagingService extends IntentService {
 
       case "notifyInviter":
         NotificationManager.getInstance()
-            .firePendingGuardianNotification(notificationData.getString("text"));
+            .firePendingGuardianNotification(notificationData.getString("pending"));
         break;
       default:
         break;
