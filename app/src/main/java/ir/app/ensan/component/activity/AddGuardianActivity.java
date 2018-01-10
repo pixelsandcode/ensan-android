@@ -26,11 +26,13 @@ import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
+import ir.app.ensan.model.network.response.GuardianListResponse;
 import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.model.network.response.SignUpResponse;
 import ir.app.ensan.model.network.response.VerificationResponse;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import retrofit2.Call;
@@ -220,6 +222,36 @@ public class AddGuardianActivity extends BaseActivity {
             });
   }
 
+  private void getGuardianList() {
+    NetworkRequestManager.getInstance().callGuardianList(new AppCallback() {
+      @Override public void onRequestSuccess(Call call, Response response) {
+        GuardianListResponse guardianListResponse = (GuardianListResponse) response.body();
+
+        ArrayList<ContactEntity> guardianList = new ArrayList<>();
+
+        for (GuardianListResponse.Guardian guardian : guardianListResponse.getData()) {
+          guardianList.add(new ContactEntity(guardian));
+        }
+
+        ContactManager.getInstance(AddGuardianActivity.this).addSelectedContacts(guardianList);
+        ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
+        ContactManager.getInstance(AddGuardianActivity.this).loadContacts();
+      }
+
+      @Override public void onRequestFail(Call call, Response response) {
+
+      }
+
+      @Override public void onRequestTimeOut(Call call, Throwable t) {
+
+      }
+
+      @Override public void onNullResponse(Call call) {
+
+      }
+    });
+  }
+
   public void sendGuardianData() {
 
     showProgressDialog();
@@ -233,9 +265,9 @@ public class AddGuardianActivity extends BaseActivity {
 
               @Override public void onGuardianAddBefore(Call call, Response response) {
                 dismissProgressDialog();
-                SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
-                    getString(R.string.duplicate_guardian), true, getString(R.string.understood),
-                    new View.OnClickListener() {
+                SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
+                    Snackbar.LENGTH_INDEFINITE, getString(R.string.duplicate_guardian), true,
+                    getString(R.string.understood), new View.OnClickListener() {
                       @Override public void onClick(View view) {
                         checkSmsPermission();
                       }
@@ -275,6 +307,7 @@ public class AddGuardianActivity extends BaseActivity {
                 if (verificationResponse.getData().getSuccess()) {
                   NetworkRequestManager.getInstance()
                       .saveAuthKey(verificationResponse.getData().getAuth());
+                  getGuardianList();
                   registerComplete = true;
                   SharedPreferencesUtil.saveBoolean(REGISTER_COMPLETE_KEY, true);
                   sendGuardianData();
