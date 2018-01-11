@@ -17,6 +17,7 @@ import ir.app.ensan.component.view.CustomTextView;
 public class AddThirdGuardianFragment extends BaseFragment {
 
   private CustomTextView addOtherGuardian;
+  private CustomTextView seeAllGuardian;
   private ImageView addButton;
 
   public AddThirdGuardianFragment() {
@@ -36,6 +37,7 @@ public class AddThirdGuardianFragment extends BaseFragment {
   @Override public void registerWidgets() {
     super.registerWidgets();
     addOtherGuardian = (CustomTextView) mainView.findViewById(R.id.sub_title2);
+    seeAllGuardian = (CustomTextView) mainView.findViewById(R.id.main_title2);
     addButton = (ImageView) mainView.findViewById(R.id.add_button);
   }
 
@@ -46,6 +48,12 @@ public class AddThirdGuardianFragment extends BaseFragment {
 
   @Override public void setListeners() {
     super.setListeners();
+
+    seeAllGuardian.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        ((AddGuardianActivity) getActivity()).openGuardianListFragment();
+      }
+    });
 
     addButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {

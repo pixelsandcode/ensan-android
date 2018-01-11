@@ -20,12 +20,15 @@ public class GuardianListAdapter extends RecyclerView.Adapter<GuardianViewHolder
   private Context context;
   private LayoutInflater layoutInflater;
   private ArrayList<ContactEntity> guardianList;
+  private boolean showAddOther;
 
   private GuardianListener guardianListener;
 
-  public GuardianListAdapter(Context context, GuardianListener guardianListener) {
+  public GuardianListAdapter(Context context, boolean showAddOther,
+      GuardianListener guardianListener) {
     this.context = context;
     this.guardianList = new ArrayList<>();
+    this.showAddOther = showAddOther;
     this.layoutInflater =
         (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     this.guardianListener = guardianListener;
@@ -59,6 +62,10 @@ public class GuardianListAdapter extends RecyclerView.Adapter<GuardianViewHolder
   }
 
   @Override public int getItemCount() {
-    return guardianList.size() + 1;
+    return guardianList.size() + (showAddOther ? 1 : 0);
+  }
+
+  public void setShowAddOther(boolean showAddOther) {
+    this.showAddOther = showAddOther;
   }
 }

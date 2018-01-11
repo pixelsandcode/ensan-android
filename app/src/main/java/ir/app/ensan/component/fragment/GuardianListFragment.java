@@ -36,12 +36,15 @@ public class GuardianListFragment extends BaseFragment {
 
   private GuardianListener guardianListener;
 
+  private boolean showAddOther;
+
   public GuardianListFragment() {
     // Required empty public constructor
   }
 
-  public static GuardianListFragment newInstance() {
+  public static GuardianListFragment newInstance(boolean showAddOther) {
     GuardianListFragment guardianListFragment = new GuardianListFragment();
+    guardianListFragment.showAddOther = showAddOther;
     return guardianListFragment;
   }
 
@@ -81,12 +84,12 @@ public class GuardianListFragment extends BaseFragment {
         String.format(getString(R.string.resend_sms_description), contactEntity.getName()), false,
         getString(R.string.send), new View.OnClickListener() {
           @Override public void onClick(View view) {
-           // ContactManager.getInstance(getActivity()).sendMessage(contactEntity);
+            // ContactManager.getInstance(getActivity()).sendMessage(contactEntity);
           }
         });
   }
 
-  private void getGuardianList(){
+  private void getGuardianList() {
     showProgressDialog();
     NetworkRequestManager.getInstance().callGuardianList(new AppCallback() {
       @Override public void onRequestSuccess(Call call, Response response) {
@@ -94,7 +97,7 @@ public class GuardianListFragment extends BaseFragment {
 
         dismissProgressDialog();
 
-        for (GuardianListResponse.Guardian guardian : guardianListResponse.getData()){
+        for (GuardianListResponse.Guardian guardian : guardianListResponse.getData()) {
           guardianList.add(new ContactEntity(guardian));
         }
         guardianListAdapter.setGuardianList(guardianList);
@@ -103,17 +106,17 @@ public class GuardianListFragment extends BaseFragment {
 
       @Override public void onRequestFail(Call call, Response response) {
         dismissProgressDialog();
-        SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView,false);
+        SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView, false);
       }
 
       @Override public void onRequestTimeOut(Call call, Throwable t) {
         dismissProgressDialog();
-        SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView,false);
+        SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView, false);
       }
 
       @Override public void onNullResponse(Call call) {
         dismissProgressDialog();
-        SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView,false);
+        SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView, false);
       }
     });
   }
@@ -128,7 +131,7 @@ public class GuardianListFragment extends BaseFragment {
   }
 
   @Override public void setRecycleAdapter() {
-    guardianListAdapter = new GuardianListAdapter(getActivity(), guardianListener);
+    guardianListAdapter = new GuardianListAdapter(getActivity(), showAddOther, guardianListener);
     recycleView.setAdapter(guardianListAdapter);
   }
 

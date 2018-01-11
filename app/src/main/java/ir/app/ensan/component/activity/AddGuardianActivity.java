@@ -19,6 +19,7 @@ import ir.app.ensan.component.fragment.AddFirstGuardianFragment;
 import ir.app.ensan.component.fragment.AddSecondGuardianFragment;
 import ir.app.ensan.component.fragment.AddThirdGuardianFragment;
 import ir.app.ensan.component.fragment.AddUserFragment;
+import ir.app.ensan.component.fragment.GuardianListFragment;
 import ir.app.ensan.component.fragment.SelectContactFragment;
 import ir.app.ensan.component.fragment.VerificationFragment;
 import ir.app.ensan.model.ContactEntity;
@@ -119,6 +120,11 @@ public class AddGuardianActivity extends BaseActivity {
   public void openSelectContactFragment() {
     SelectContactFragment selectContactFragment = SelectContactFragment.newInstance();
     setFragment(selectContactFragment);
+  }
+
+  public void openGuardianListFragment() {
+    GuardianListFragment guardianListFragment = GuardianListFragment.newInstance(false);
+    setFragment(guardianListFragment);
   }
 
   private void openAddUserFragment() {
@@ -370,7 +376,7 @@ public class AddGuardianActivity extends BaseActivity {
     firstTransaction = false;
 
     transaction.replace(R.id.fragment_container, fragment, backStateName)
-        // .addToBackStack(backStateName)
+        .addToBackStack(backStateName)
         .commit();
   }
 
@@ -411,6 +417,12 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   @Override public void onBackPressed() {
+    Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+    if (fragment instanceof GuardianListFragment){
+      super.onBackPressed();
+      return;
+    }
     SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
         getString(R.string.please_finish_sign_up), true);
   }

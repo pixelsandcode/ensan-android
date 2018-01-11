@@ -97,7 +97,7 @@ public class HomeActivity extends BaseActivity {
   }
 
   public void openGuardianListFragment() {
-    GuardianListFragment guardianListFragment = GuardianListFragment.newInstance();
+    GuardianListFragment guardianListFragment = GuardianListFragment.newInstance(true);
     setFragment(guardianListFragment);
   }
 
