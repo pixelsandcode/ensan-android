@@ -7,8 +7,15 @@ import ir.app.ensan.BuildConfig;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.common.NotificationManager;
+import ir.app.ensan.component.fragment.AddUserFragment;
+import ir.app.ensan.model.network.NetworkRequestManager;
+import ir.app.ensan.model.network.callback.AppCallback;
+import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.util.SharedPreferencesUtil;
+import ir.app.ensan.util.SnackUtil;
 import ir.app.ensan.util.TimeUtil;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class SplashActivity extends BaseActivity {
 
@@ -63,12 +70,46 @@ public class SplashActivity extends BaseActivity {
       if (firstTime) {
         openIntroductionActivity();
       } else {
-        if (ContactManager.getInstance(SplashActivity.this).isContactExist()) {
-          openHomeActivity();
-        } else {
-          openAddGuardianActivity();
-        }
+        loginUser();
       }
     }
   };
+
+  public void loginUser() {
+    NetworkRequestManager.getInstance()
+        .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
+            new AppCallback() {
+              @Override public void onRequestSuccess(Call call, Response response) {
+
+                dismissProgressDialog();
+                LoginResponse loginResponse = (LoginResponse) response.body();
+
+                if (loginResponse.getData().getSuccess()) {
+                  if (ContactManager.getInstance(SplashActivity.this).isContactExist()) {
+                    openHomeActivity();
+                  } else {
+                    openAddGuardianActivity();
+                  }
+                }
+              }
+
+              @Override public void onRequestFail(Call call, Response response) {
+                dismissProgressDialog();
+                SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this,
+                    getWindow().getDecorView());
+              }
+
+              @Override public void onRequestTimeOut(Call call, Throwable t) {
+                dismissProgressDialog();
+                SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this,
+                    getWindow().getDecorView());
+              }
+
+              @Override public void onNullResponse(Call call) {
+                dismissProgressDialog();
+                SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this,
+                    getWindow().getDecorView());
+              }
+            });
+  }
 }
