@@ -79,8 +79,8 @@ public class ContactManager {
         continue;
       }
 
-      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("\\s+",""));
-      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("[\\s\\-()]",""));
+      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("\\s+", ""));
+      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("[\\s\\-()]", ""));
       contactEntities.add(contactEntity);
     }
     cursor.close();
@@ -143,6 +143,7 @@ public class ContactManager {
     loadContacts();
     return selectedContacts;
   }
+
   public void getGuardianSize() {
     selectedContacts.size();
   }
@@ -150,8 +151,9 @@ public class ContactManager {
   public void sendMessage(ContactEntity contactEntity, SmsListener smsListener) {
     try {
       SmsManager smsManager = SmsManager.getDefault();
-      smsManager.sendTextMessage(contactEntity.getPhoneNumber(), null,
-          context.getString(R.string.invitation_message), null, null);
+      ArrayList<String> parts =
+          smsManager.divideMessage(context.getString(R.string.invitation_message));
+      smsManager.sendMultipartTextMessage(contactEntity.getPhoneNumber(), null, parts, null, null);
       smsListener.onSmsSent(contactEntity);
     } catch (Exception ex) {
       smsListener.onSmsNotSent(contactEntity);
