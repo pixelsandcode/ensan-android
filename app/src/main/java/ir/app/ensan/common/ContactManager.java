@@ -9,7 +9,6 @@ import com.google.gson.reflect.TypeToken;
 import ir.app.ensan.R;
 import ir.app.ensan.component.abstraction.SmsListener;
 import ir.app.ensan.model.ContactEntity;
-import ir.app.ensan.util.LogUtil;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,10 +48,12 @@ public class ContactManager {
   }
 
   public ArrayList<ContactEntity> getAllContacts() {
+    String phoneNumber = "";
     ArrayList<ContactEntity> contactEntities = new ArrayList<>();
 
     Cursor cursor = context.getContentResolver()
-        .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, PROJECTION, null, null, null);
+        .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, PROJECTION, null, null,
+            "lower(" + ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + ") ASC");
 
     if (cursor == null) {
       return new ArrayList<>();
@@ -74,13 +75,15 @@ public class ContactManager {
               cursor.getString(
                   cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
 
-      LogUtil.logI("phone type", contactEntity.getPhoneNumber() + " " + phoneType);
-      if (contactAlreadyExist(contactEntity.getPhoneNumber())) {
+      phoneNumber = contactEntity.getPhoneNumber();
+      phoneNumber = phoneNumber.replaceAll("\\s+", "");
+      phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
+
+      if (contactAlreadyExist(phoneNumber)) {
         continue;
       }
 
-      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("\\s+", ""));
-      contactEntity.setPhoneNumber(contactEntity.getPhoneNumber().replaceAll("[\\s\\-()]", ""));
+      contactEntity.setPhoneNumber(phoneNumber);
       contactEntities.add(contactEntity);
     }
     cursor.close();
@@ -100,17 +103,32 @@ public class ContactManager {
     this.selectedContacts.add(newContacts);
   }
 
+  public void clearSelectedContacts() {
+    this.selectedContacts.clear();
+  }
+
   public Set<ContactEntity> getSelectedContacts() {
     return selectedContacts;
   }
 
   private boolean contactAlreadyExist(String phoneNumber) {
+    phoneNumber = deletePrefix(phoneNumber);
     for (ContactEntity contactEntity : selectedContacts) {
-      if (phoneNumber.equals(contactEntity.getPhoneNumber())) {
+      if (phoneNumber.equals(deletePrefix(contactEntity.getPhoneNumber()))) {
         return true;
       }
     }
     return false;
+  }
+
+  private String deletePrefix(String phoneNumber) {
+    if (phoneNumber.startsWith("+98")) {
+      phoneNumber = phoneNumber.substring(3);
+    } else if (phoneNumber.startsWith("0")) {
+      phoneNumber = phoneNumber.substring(1);
+    }
+
+    return phoneNumber;
   }
 
   public void saveContacts() {

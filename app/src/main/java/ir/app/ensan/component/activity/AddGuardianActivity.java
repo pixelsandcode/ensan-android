@@ -239,6 +239,7 @@ public class AddGuardianActivity extends BaseActivity {
           guardianList.add(new ContactEntity(guardian));
         }
 
+        ContactManager.getInstance(AddGuardianActivity.this).clearSelectedContacts();
         ContactManager.getInstance(AddGuardianActivity.this).addSelectedContacts(guardianList);
         ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
         ContactManager.getInstance(AddGuardianActivity.this).loadContacts();
@@ -267,10 +268,12 @@ public class AddGuardianActivity extends BaseActivity {
               @Override public void onRequestSuccess(Call call, Response response) {
                 dismissProgressDialog();
                 checkSmsPermission();
+                getGuardianList();
               }
 
               @Override public void onGuardianAddBefore(Call call, Response response) {
                 dismissProgressDialog();
+                getGuardianList();
                 SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
                     Snackbar.LENGTH_INDEFINITE, getString(R.string.duplicate_guardian), true,
                     getString(R.string.understood), new View.OnClickListener() {
@@ -313,11 +316,10 @@ public class AddGuardianActivity extends BaseActivity {
                 if (verificationResponse.getData().getSuccess()) {
                   NetworkRequestManager.getInstance()
                       .saveAuthKey(verificationResponse.getData().getAuth());
-                  getGuardianList();
                   registerComplete = true;
                   SharedPreferencesUtil.saveBoolean(REGISTER_COMPLETE_KEY, true);
                   sendGuardianData();
-                  fragmentManager.popBackStack();
+
                 }
               }
 

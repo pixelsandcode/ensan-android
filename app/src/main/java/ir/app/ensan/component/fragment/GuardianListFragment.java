@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ir.app.ensan.R;
+import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.abstraction.GuardianListener;
 import ir.app.ensan.component.activity.HomeActivity;
 import ir.app.ensan.component.adapter.GuardianListAdapter;
@@ -100,6 +101,12 @@ public class GuardianListFragment extends BaseFragment {
         for (GuardianListResponse.Guardian guardian : guardianListResponse.getData()) {
           guardianList.add(new ContactEntity(guardian));
         }
+
+        ContactManager.getInstance(getActivity()).clearSelectedContacts();
+        ContactManager.getInstance(getActivity()).addSelectedContacts(guardianList);
+        ContactManager.getInstance(getActivity()).saveContacts();
+        ContactManager.getInstance(getActivity()).loadContacts();
+
         guardianListAdapter.setGuardianList(guardianList);
         notifyRecycleAdapter();
       }
