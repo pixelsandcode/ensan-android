@@ -50,7 +50,7 @@ public class HomeActivity extends BaseActivity {
     fragmentManager = getSupportFragmentManager();
 
     openMainFragment();
-    checkCallPermission();
+    //checkCallPermission();
     sendNotificationToken();
   }
 

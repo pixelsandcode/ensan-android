@@ -156,7 +156,7 @@ public class NotificationManager {
             .setAutoCancel(true)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
-    Intent phoneCall = new Intent(Intent.ACTION_CALL);
+    Intent phoneCall = new Intent(Intent.ACTION_DIAL);
     phoneCall.setData((Uri.parse("tel:" + phoneNumber)));
     PendingIntent phoneCallIntent =
         PendingIntent.getActivity(context, 0, phoneCall, PendingIntent.FLAG_CANCEL_CURRENT);
