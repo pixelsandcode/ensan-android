@@ -55,11 +55,10 @@ public class MainFragment extends BaseFragment {
         ContactManager.getInstance(getActivity()).getSelectedContacts().size()));
 
     firstDangerNotification = SharedPreferencesUtil.loadBoolean(SEND_DANGER_WARNING_KEY, true);
-    SharedPreferencesUtil.saveBoolean(SEND_DANGER_WARNING_KEY, false);
+
   }
 
   private void showWarningDialog() {
-    firstDangerNotification = false;
     warningDialog = new MaterialDialog.Builder(getActivity()).title(R.string.warning)
         .content(R.string.send_in_danger_status_warning)
         .positiveText(R.string.ok)
@@ -67,6 +66,8 @@ public class MainFragment extends BaseFragment {
         .onPositive(new MaterialDialog.SingleButtonCallback() {
           @Override
           public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            firstDangerNotification = false;
+            SharedPreferencesUtil.saveBoolean(SEND_DANGER_WARNING_KEY, firstDangerNotification);
             ((HomeActivity) getActivity()).sendNotify(false);
           }
         })
