@@ -16,8 +16,9 @@ import ir.app.ensan.component.view.CustomTextView;
  */
 public class AddSecondGuardianFragment extends BaseFragment {
 
-  private CustomTextView addOtherGuardian;
   private CustomTextView seeAllGuardian;
+  private CustomTextView guardianCountTextView;
+  private ImageView eyeImageView;
   private ImageView addButton;
 
   public AddSecondGuardianFragment() {
@@ -36,14 +37,15 @@ public class AddSecondGuardianFragment extends BaseFragment {
 
   @Override public void registerWidgets() {
     super.registerWidgets();
-    addOtherGuardian = (CustomTextView) mainView.findViewById(R.id.sub_title2);
     seeAllGuardian = (CustomTextView) mainView.findViewById(R.id.main_title2);
     addButton = (ImageView) mainView.findViewById(R.id.add_button);
+    guardianCountTextView = (CustomTextView) mainView.findViewById(R.id.sub_title2);
+    eyeImageView = (ImageView) mainView.findViewById(R.id.eye_image_view);
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    addOtherGuardian.setText(String.format(getString(R.string.add_guardian_sub_title2),2));
+    guardianCountTextView.setText(String.format(getString(R.string.add_guardian_sub_title2),2));
   }
 
   @Override public void setListeners() {
@@ -58,6 +60,18 @@ public class AddSecondGuardianFragment extends BaseFragment {
     addButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         ((AddGuardianActivity) getActivity()).openContact();
+      }
+    });
+
+    guardianCountTextView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        ((AddGuardianActivity) getActivity()).openGuardianListFragment();
+      }
+    });
+
+    eyeImageView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        ((AddGuardianActivity) getActivity()).openGuardianListFragment();
       }
     });
   }

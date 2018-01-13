@@ -66,12 +66,13 @@ public class HomeActivity extends BaseActivity {
 
       @Override public void onSmsNotSent(ContactEntity contactEntity) {
         SnackUtil.makeSnackBar(HomeActivity.this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
-            String.format(getString(R.string.contact_sms_sent), contactEntity.getName()), true,
+            String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true,
             getString(R.string.send_again), new View.OnClickListener() {
               @Override public void onClick(View view) {
                 checkSmsPermission();
               }
             });
+        ContactManager.getInstance(HomeActivity.this).saveContacts();
       }
     };
   }

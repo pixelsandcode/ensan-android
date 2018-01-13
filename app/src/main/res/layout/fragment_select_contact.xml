@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/contact_background"
     tools:context="ir.app.ensan.component.fragment.SelectContactFragment"
     >
@@ -47,12 +47,27 @@
         />
   </RelativeLayout>
 
+  <ir.app.ensan.component.view.CustomEditText
+      android:id="@+id/search_edit_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/header_view"
+      android:hint="@string/search"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:theme="@style/EditTextStyle"
+      android:textColor="@color/white"
+      />
+
   <ir.app.ensan.component.view.CustomRecycleView
       android:id="@+id/contact_recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/header_view"
-      android:layout_marginBottom="50dp"/>
+      android:layout_below="@+id/search_edit_text"
+      android:layout_marginBottom="50dp"
+      />
 
   <ir.app.ensan.component.view.CustomTextView
       android:id="@+id/contact_empty_view"
@@ -68,9 +83,9 @@
       android:layout_width="match_parent"
       android:layout_height="50dp"
       android:layout_alignParentBottom="true"
+      android:background="@color/contact_button_background"
       android:text="@string/confirm"
       android:textColor="@color/white"
-      android:background="@color/contact_button_background"
       />
 
 </RelativeLayout>

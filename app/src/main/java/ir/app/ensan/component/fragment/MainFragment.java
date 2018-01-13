@@ -28,6 +28,7 @@ public class MainFragment extends BaseFragment {
   private View safe;
   private View inDanger;
   private ImageView addContactButton;
+  private ImageView eyeImageView;
   private CustomTextView seeGuardianListTextView;
   private CustomTextView guardianCountTextView;
 
@@ -87,6 +88,7 @@ public class MainFragment extends BaseFragment {
     addContactButton = (ImageView) mainView.findViewById(R.id.add_button);
     seeGuardianListTextView = (CustomTextView) mainView.findViewById(R.id.main_title2);
     guardianCountTextView = (CustomTextView) mainView.findViewById(R.id.sub_title2);
+    eyeImageView = (ImageView) mainView.findViewById(R.id.eye_image_view);
   }
 
   @Override public void setListeners() {
@@ -119,5 +121,18 @@ public class MainFragment extends BaseFragment {
         ((HomeActivity) getActivity()).openGuardianListFragment();
       }
     });
+
+    guardianCountTextView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        ((HomeActivity) getActivity()).openGuardianListFragment();
+      }
+    });
+
+    eyeImageView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        ((HomeActivity) getActivity()).openGuardianListFragment();
+      }
+    });
+
   }
 }

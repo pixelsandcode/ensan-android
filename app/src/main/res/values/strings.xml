@@ -10,7 +10,9 @@
 
   <string name="add_guardian_main_title1">افزودن فامیل و دوستان نزدیک</string>
   <string name="add_guardian_sub_title1">افزودن کسانی که شما برایشان مهم هستید</string>
-  <string name="invitation_message">سلام لطفاً برنامه ی Ensan رو دانلود کن. من شما رو به عنوان سرپرست خودم معرفی کردم تا در صورت زمین لرزه یا بروز حادثه از سلامت من با خبر باشید.\hhttp://ensanapp.ir\n</string>
+  <string name="invitation_message">سلام لطفاً برنامه ی Ensan رو دانلود کن. من شما رو به عنوان سرپرست خودم معرفی کردم تا در صورت زمین لرزه یا بروز حادثه از سلامت من با خبر باشید.\n http://ensanapp.ir
+</string>
+
   <string name="sms_code">کد SMS</string>
 
   <string name="add_guardian_main_title2">مشاهده ی لیست آشنایان</string>
@@ -28,7 +30,7 @@
   <string name="phone_number_not_valid">شماره ی تلفن همراه معتبر نیست</string>
 
   <string name="contact_sms_sent">پیام شما به %s ارسال شد</string>
-  <string name="contact_sms_not_sent">پیام شما به %s ارسال شد</string>
+  <string name="contact_sms_not_sent">پیام شما به %s ارسال نشد</string>
   <string name="user_status_safe">پیام سلامت شما ارسال شد</string>
   <string name="user_status_in_danger">پیام کمک شما ارسال شد</string>
   <string name="notified_safe_status_count">%d نفر از سلامت شما مطلع شدند</string>
@@ -37,6 +39,7 @@
   <string name="guardian_not_answer_yet">هنوز جواب نداده</string>
   <string name="select_one_at_least">حداقل یک مخاطب انتخاب کنید</string>
   <string name="please_finish_sign_up">لطفاً ثبت نام خود را تکمیل کنید</string>
+  <string name="tap_back_again">برای خروج دکمه ی بازگشت را دوباره کلیک کنید</string>
   <string name="please_enter_your_name">لطفاً نام کامل خود را وارد کنید</string>
   <string name="please_enter_your_phone_number">لطفاً شماره تلفن خود را وارد کنید</string>
 
@@ -80,6 +83,8 @@
   <string name="your_information">اطلاعات شما</string>
   <string name="retrieve_account">بازیابی حساب کاربری</string>
   <string name="guardians">سرپرست ها</string>
+
+  <string name="search">جستجو</string>
 
   <string-array name="main_titles">
     <item>انسان</item>

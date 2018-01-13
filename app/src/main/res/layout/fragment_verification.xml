@@ -59,6 +59,7 @@
       android:layout_marginTop="32dp"
       android:gravity="center"
       android:hint="@string/sms_code"
+      android:inputType="number"
       android:textColor="@color/white"
       android:theme="@style/EditTextStyle"
       />

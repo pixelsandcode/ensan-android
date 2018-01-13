@@ -22,6 +22,7 @@ import ir.app.ensan.component.fragment.AddUserFragment;
 import ir.app.ensan.component.fragment.GuardianListFragment;
 import ir.app.ensan.component.fragment.SelectContactFragment;
 import ir.app.ensan.component.fragment.VerificationFragment;
+import ir.app.ensan.component.service.AppMessagingIdService;
 import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.callback.AddGuardianCallback;
@@ -33,6 +34,7 @@ import ir.app.ensan.model.network.response.SignUpResponse;
 import ir.app.ensan.model.network.response.VerificationResponse;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
+import ir.app.ensan.util.TimeUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +45,7 @@ public class AddGuardianActivity extends BaseActivity {
 
   private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
   private static final int PERMISSIONS_REQUEST_SMS = 1002;
+  private static final int BACK_DELAY_TIME = 2000;
 
   private static final String REGISTER_COMPLETE_KEY = "register_complete";
 
@@ -60,6 +63,8 @@ public class AddGuardianActivity extends BaseActivity {
   private boolean firstTransaction = true;
   private boolean registerComplete = false;
   private boolean login = false;
+
+  private long backPressed;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -92,10 +97,12 @@ public class AddGuardianActivity extends BaseActivity {
       @Override public void onSmsNotSent(ContactEntity contactEntity) {
         SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
             Snackbar.LENGTH_LONG,
-            String.format(getString(R.string.contact_sms_sent), contactEntity.getName()), true,
+            String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true,
             getString(R.string.send_again), new View.OnClickListener() {
               @Override public void onClick(View view) {
                 checkSmsPermission();
+                ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
+                handler.post(runnable);
               }
             });
       }
@@ -165,6 +172,7 @@ public class AddGuardianActivity extends BaseActivity {
                 registerComplete = true;
                 SharedPreferencesUtil.saveBoolean(REGISTER_COMPLETE_KEY, true);
                 sendGuardianData();
+                sendNotificationToken();
               }
 
               @Override public void onRequestFail(Call call, Response response) {
@@ -243,6 +251,10 @@ public class AddGuardianActivity extends BaseActivity {
         ContactManager.getInstance(AddGuardianActivity.this).addSelectedContacts(guardianList);
         ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
         ContactManager.getInstance(AddGuardianActivity.this).loadContacts();
+
+        if (login){
+          handler.post(runnable);
+        }
       }
 
       @Override public void onRequestFail(Call call, Response response) {
@@ -318,7 +330,8 @@ public class AddGuardianActivity extends BaseActivity {
                       .saveAuthKey(verificationResponse.getData().getAuth());
                   registerComplete = true;
                   SharedPreferencesUtil.saveBoolean(REGISTER_COMPLETE_KEY, true);
-                  sendGuardianData();
+                  getGuardianList();
+                  sendNotificationToken();
                 }
               }
 
@@ -340,6 +353,34 @@ public class AddGuardianActivity extends BaseActivity {
                     getWindow().getDecorView());
               }
             });
+  }
+
+
+  public void sendNotificationToken() {
+
+    String token =
+        SharedPreferencesUtil.loadString(AppMessagingIdService.NOTIFICATION_TOKEN_KEY, "");
+
+    if (token.isEmpty()) {
+      return;
+    }
+
+    NetworkRequestManager.getInstance().callAddDevice(token, new AppCallback() {
+      @Override public void onRequestSuccess(Call call, Response response) {
+      }
+
+      @Override public void onRequestFail(Call call, Response response) {
+
+      }
+
+      @Override public void onRequestTimeOut(Call call, Throwable t) {
+
+      }
+
+      @Override public void onNullResponse(Call call) {
+
+      }
+    });
   }
 
   private void openNextFragment() {
@@ -429,8 +470,15 @@ public class AddGuardianActivity extends BaseActivity {
       super.onBackPressed();
       return;
     }
-    SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
-        getString(R.string.please_finish_sign_up), true);
+
+    if (backPressed + BACK_DELAY_TIME > System.currentTimeMillis()) {
+      android.os.Process.killProcess(android.os.Process.myPid());
+    } else {
+      SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
+          getString(R.string.tap_back_again), true);
+    }
+
+    backPressed = TimeUtil.getCurrentDate();
   }
 
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

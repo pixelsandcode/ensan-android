@@ -79,7 +79,8 @@ public class ContactManager {
       phoneNumber = phoneNumber.replaceAll("\\s+", "");
       phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
 
-      if (contactAlreadyExist(phoneNumber)) {
+      if (contactAlreadyExist(contactEntities, phoneNumber) || contactAlreadySelected(
+          phoneNumber)) {
         continue;
       }
 
@@ -111,7 +112,18 @@ public class ContactManager {
     return selectedContacts;
   }
 
-  private boolean contactAlreadyExist(String phoneNumber) {
+  private boolean contactAlreadyExist(ArrayList<ContactEntity> contactEntities,
+      String phoneNumber) {
+    phoneNumber = deletePrefix(phoneNumber);
+    for (ContactEntity contactEntity : contactEntities) {
+      if (phoneNumber.equals(deletePrefix(contactEntity.getPhoneNumber()))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean contactAlreadySelected(String phoneNumber) {
     phoneNumber = deletePrefix(phoneNumber);
     for (ContactEntity contactEntity : selectedContacts) {
       if (phoneNumber.equals(deletePrefix(contactEntity.getPhoneNumber()))) {

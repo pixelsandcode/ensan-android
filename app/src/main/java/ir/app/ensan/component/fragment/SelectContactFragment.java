@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import ir.app.ensan.component.activity.AddGuardianActivity;
 import ir.app.ensan.component.activity.HomeActivity;
 import ir.app.ensan.component.adapter.ContactSelectAdapter;
 import ir.app.ensan.component.view.CustomButton;
+import ir.app.ensan.component.view.CustomEditText;
 import ir.app.ensan.component.view.CustomRecycleView;
 import ir.app.ensan.component.view.CustomTextView;
 import ir.app.ensan.model.ContactEntity;
@@ -33,13 +36,15 @@ public class SelectContactFragment extends BaseFragment {
   private RecyclerView.LayoutManager layoutManager;
   private ContactSelectAdapter contactSelectAdapter;
 
-  private ArrayList<ContactEntity> allContacts;
+  private ArrayList<ContactEntity> allContacts = new ArrayList<>();
+  private ArrayList<ContactEntity> filteredContacts = new ArrayList<>();
   private ContactEntity selectedContact;
 
   private ContactSelectListener contactSelectListener;
 
   private CustomButton confirmButton;
   private CustomTextView emptyView;
+  private CustomEditText searchEditText;
 
   private ImageView backButton;
   private CustomTextView backTextView;
@@ -64,6 +69,8 @@ public class SelectContactFragment extends BaseFragment {
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     initRecycleView();
+    allContacts = ContactManager.getInstance(getActivity()).getAllContacts();
+    filteredContacts.addAll(allContacts);
     setContact();
   }
 
@@ -74,10 +81,44 @@ public class SelectContactFragment extends BaseFragment {
     emptyView = (CustomTextView) mainView.findViewById(R.id.contact_empty_view);
     backTextView = (CustomTextView) mainView.findViewById(R.id.back_text_view);
     backButton = (ImageView) mainView.findViewById(R.id.arrow_right);
+    searchEditText = (CustomEditText) mainView.findViewById(R.id.search_edit_text);
+  }
+
+  private void searchContacts(String query) {
+
+    if (query.isEmpty()){
+      filteredContacts.addAll(allContacts);
+      setContact();
+    }
+
+    filteredContacts.clear();
+
+    for (ContactEntity contactEntity : allContacts) {
+      if (contactEntity.getName().contains(query) || contactEntity.getPhoneNumber()
+          .contains(query)) {
+        filteredContacts.add(contactEntity);
+      }
+    }
+
+    setContact();
   }
 
   @Override public void setListeners() {
     super.setListeners();
+
+    searchEditText.addTextChangedListener(new TextWatcher() {
+      @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+      }
+
+      @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+        searchContacts(s.toString());
+      }
+
+      @Override public void afterTextChanged(Editable s) {
+
+      }
+    });
     confirmButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
 
@@ -162,10 +203,10 @@ public class SelectContactFragment extends BaseFragment {
   }
 
   private void setContact() {
-    allContacts = ContactManager.getInstance(getActivity()).getAllContacts();
-    contactSelectAdapter.setContactEntities(allContacts);
 
-    if (allContacts.isEmpty()) {
+    contactSelectAdapter.setContactEntities(filteredContacts);
+
+    if (filteredContacts.isEmpty()) {
       recycleView.setEmptyViewVisibility(View.VISIBLE);
       confirmButton.setVisibility(View.GONE);
       return;
