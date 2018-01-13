@@ -6,12 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import ir.app.ensan.BuildConfig;
 import ir.app.ensan.R;
 import ir.app.ensan.component.activity.AddGuardianActivity;
 import ir.app.ensan.component.view.CustomButton;
 import ir.app.ensan.component.view.CustomEditText;
+import ir.app.ensan.component.view.CustomTextView;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
 import java.util.regex.Matcher;
@@ -25,6 +27,8 @@ public class AddUserFragment extends BaseFragment {
   public static final String USER_NAME_KEY = "username";
   public static final String PHONE_NUMBER_KEY = "phone_number";
   private CustomButton sendButton;
+  private ImageView backButton;
+  private CustomTextView backTextView;
   private CustomEditText userNameEditText;
   private CustomEditText phoneNumberEditText;
 
@@ -48,6 +52,8 @@ public class AddUserFragment extends BaseFragment {
     sendButton = (CustomButton) mainView.findViewById(R.id.send_button);
     userNameEditText = (CustomEditText) mainView.findViewById(R.id.user_name_edit_text);
     phoneNumberEditText = (CustomEditText) mainView.findViewById(R.id.user_phone_edit_text);
+    backTextView = (CustomTextView) mainView.findViewById(R.id.back_text_view);
+    backButton = (ImageView) mainView.findViewById(R.id.arrow_right);
   }
 
   @Override public void setListeners() {
@@ -55,6 +61,18 @@ public class AddUserFragment extends BaseFragment {
     sendButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         checkValidation();
+      }
+    });
+
+    backButton.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
+      }
+    });
+
+    backTextView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
       }
     });
   }

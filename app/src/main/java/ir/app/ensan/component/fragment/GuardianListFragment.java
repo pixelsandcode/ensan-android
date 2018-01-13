@@ -9,12 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.abstraction.GuardianListener;
 import ir.app.ensan.component.activity.HomeActivity;
 import ir.app.ensan.component.adapter.GuardianListAdapter;
 import ir.app.ensan.component.view.CustomRecycleView;
+import ir.app.ensan.component.view.CustomTextView;
 import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.callback.AppCallback;
@@ -36,6 +38,9 @@ public class GuardianListFragment extends BaseFragment {
   private ArrayList<ContactEntity> guardianList;
 
   private GuardianListener guardianListener;
+
+  private ImageView backButton;
+  private CustomTextView backTextView;
 
   private boolean showAddOther;
 
@@ -65,10 +70,25 @@ public class GuardianListFragment extends BaseFragment {
   @Override public void registerWidgets() {
     super.registerWidgets();
     recycleView = (CustomRecycleView) mainView.findViewById(R.id.guardian_recycler_view);
+    backTextView = (CustomTextView) mainView.findViewById(R.id.back_text_view);
+    backButton = (ImageView) mainView.findViewById(R.id.arrow_right);
   }
 
   @Override public void setListeners() {
     super.setListeners();
+
+    backButton.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
+      }
+    });
+
+    backTextView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
+      }
+    });
+
     guardianListener = new GuardianListener() {
       @Override public void onGuardianClick(ContactEntity contactEntity) {
         showResendSmsSnackBar(contactEntity);

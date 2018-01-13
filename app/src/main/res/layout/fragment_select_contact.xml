@@ -7,10 +7,51 @@
     tools:context="ir.app.ensan.component.fragment.SelectContactFragment"
     >
 
+  <RelativeLayout
+      android:id="@+id/header_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="16dp"
+      >
+
+    <ir.app.ensan.component.view.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:font_type="bold"
+        />
+
+    <ImageView
+        android:id="@+id/arrow_right"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_arrow_right"
+        />
+
+    <ir.app.ensan.component.view.CustomTextView
+        android:id="@+id/back_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="-4dp"
+        android:layout_toLeftOf="@+id/arrow_right"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        />
+  </RelativeLayout>
+
   <ir.app.ensan.component.view.CustomRecycleView
       android:id="@+id/contact_recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_below="@+id/header_view"
       android:layout_marginBottom="50dp"/>
 
   <ir.app.ensan.component.view.CustomTextView

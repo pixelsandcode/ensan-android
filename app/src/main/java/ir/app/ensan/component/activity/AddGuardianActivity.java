@@ -319,7 +319,6 @@ public class AddGuardianActivity extends BaseActivity {
                   registerComplete = true;
                   SharedPreferencesUtil.saveBoolean(REGISTER_COMPLETE_KEY, true);
                   sendGuardianData();
-
                 }
               }
 
@@ -421,7 +420,12 @@ public class AddGuardianActivity extends BaseActivity {
   @Override public void onBackPressed() {
     Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
-    if (fragment instanceof GuardianListFragment){
+    boolean allowBack = fragment instanceof GuardianListFragment
+        || fragment instanceof AddUserFragment
+        || fragment instanceof VerificationFragment
+        || fragment instanceof SelectContactFragment;
+
+    if (allowBack) {
       super.onBackPressed();
       return;
     }

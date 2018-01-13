@@ -5,10 +5,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import ir.app.ensan.R;
 import ir.app.ensan.component.activity.AddGuardianActivity;
 import ir.app.ensan.component.view.CustomButton;
 import ir.app.ensan.component.view.CustomEditText;
+import ir.app.ensan.component.view.CustomTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +19,8 @@ public class VerificationFragment extends BaseFragment {
 
   private CustomEditText panNameEditText;
   private CustomButton sendButton;
+  private ImageView backButton;
+  private CustomTextView backTextView;
 
   private String pin;
 
@@ -39,6 +43,8 @@ public class VerificationFragment extends BaseFragment {
     super.registerWidgets();
     panNameEditText = (CustomEditText) mainView.findViewById(R.id.sms_edit_text);
     sendButton = (CustomButton) mainView.findViewById(R.id.send_button);
+    backTextView = (CustomTextView) mainView.findViewById(R.id.back_text_view);
+    backButton = (ImageView) mainView.findViewById(R.id.arrow_right);
   }
 
   @Override public void setListeners() {
@@ -52,6 +58,18 @@ public class VerificationFragment extends BaseFragment {
         } else {
           ((AddGuardianActivity) getActivity()).sendVerifyRequest(pin);
         }
+      }
+    });
+
+    backButton.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
+      }
+    });
+
+    backTextView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
       }
     });
   }

@@ -53,63 +53,61 @@ public class SplashActivity extends BaseActivity {
     startActivity(intent);
   }
 
-  private void scheduleNotifications(){
+  private void scheduleNotifications() {
 
-    if (!firstTime){
+    if (!firstTime) {
       return;
     }
 
-    NotificationManager.getInstance().scheduleNotification(BuildConfig.STG?
-        TimeUtil.getCurrentDate()+10000 : TimeUtil.addDayFromNow(1));// first day
+    NotificationManager.getInstance()
+        .scheduleNotification(BuildConfig.STG ? TimeUtil.getCurrentDate() + 10000
+            : TimeUtil.addDayFromNow(1));// first day
     NotificationManager.getInstance().scheduleNotification(TimeUtil.addDayFromNow(3));// 3 day later
     NotificationManager.getInstance().scheduleNotification(TimeUtil.addDayFromNow(7));// 7 day later
   }
 
   private Runnable runnable = new Runnable() {
     @Override public void run() {
-      if (firstTime) {
+
+      String phoneNumber = SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, "");
+      if (firstTime || phoneNumber.isEmpty()) {
         openIntroductionActivity();
       } else {
-        loginUser();
+        loginUser(phoneNumber);
       }
     }
   };
 
-  public void loginUser() {
-    NetworkRequestManager.getInstance()
-        .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
-            new AppCallback() {
-              @Override public void onRequestSuccess(Call call, Response response) {
+  public void loginUser(String phoneNumber) {
+    NetworkRequestManager.getInstance().callLogin(phoneNumber, new AppCallback() {
+      @Override public void onRequestSuccess(Call call, Response response) {
 
-                dismissProgressDialog();
-                LoginResponse loginResponse = (LoginResponse) response.body();
+        dismissProgressDialog();
+        LoginResponse loginResponse = (LoginResponse) response.body();
 
-                if (loginResponse.getData().getSuccess()) {
-                  if (ContactManager.getInstance(SplashActivity.this).isContactExist()) {
-                    openHomeActivity();
-                  } else {
-                    openAddGuardianActivity();
-                  }
-                }
-              }
+        if (loginResponse.getData().getSuccess()) {
+          if (ContactManager.getInstance(SplashActivity.this).isContactExist()) {
+            openHomeActivity();
+          } else {
+            openAddGuardianActivity();
+          }
+        }
+      }
 
-              @Override public void onRequestFail(Call call, Response response) {
-                dismissProgressDialog();
-                SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this,
-                    getWindow().getDecorView());
-              }
+      @Override public void onRequestFail(Call call, Response response) {
+        dismissProgressDialog();
+        SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this, getWindow().getDecorView());
+      }
 
-              @Override public void onRequestTimeOut(Call call, Throwable t) {
-                dismissProgressDialog();
-                SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this,
-                    getWindow().getDecorView());
-              }
+      @Override public void onRequestTimeOut(Call call, Throwable t) {
+        dismissProgressDialog();
+        SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this, getWindow().getDecorView());
+      }
 
-              @Override public void onNullResponse(Call call) {
-                dismissProgressDialog();
-                SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this,
-                    getWindow().getDecorView());
-              }
-            });
+      @Override public void onNullResponse(Call call) {
+        dismissProgressDialog();
+        SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this, getWindow().getDecorView());
+      }
+    });
   }
 }

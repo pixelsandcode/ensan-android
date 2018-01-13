@@ -71,10 +71,15 @@
 
   <string name="internet_disconnect">اتصال خود به اینترنت را بررسی کنید</string>
   <string name="network_setting">تنظیمات شبکه</string>
+  <string name="back">برگشت</string>
 
   <string name="call">تماس</string>
   <string name="cancel">انصراف</string>
   <string name="ok">تایید</string>
+
+  <string name="your_information">اطلاعات شما</string>
+  <string name="retrieve_account">بازیابی حساب کاربری</string>
+  <string name="guardians">سرپرست ها</string>
 
   <string-array name="main_titles">
     <item>انسان</item>

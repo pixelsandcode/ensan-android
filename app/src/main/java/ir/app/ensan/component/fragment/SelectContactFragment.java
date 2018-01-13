@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.abstraction.ContactSelectListener;
@@ -40,7 +41,8 @@ public class SelectContactFragment extends BaseFragment {
   private CustomButton confirmButton;
   private CustomTextView emptyView;
 
-  private Handler handler;
+  private ImageView backButton;
+  private CustomTextView backTextView;
 
   private int selectedIndex = -1;
 
@@ -61,7 +63,6 @@ public class SelectContactFragment extends BaseFragment {
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    handler = new Handler();
     initRecycleView();
     setContact();
   }
@@ -71,6 +72,8 @@ public class SelectContactFragment extends BaseFragment {
     recycleView = (CustomRecycleView) mainView.findViewById(R.id.contact_recycler_view);
     confirmButton = (CustomButton) mainView.findViewById(R.id.confirm_button);
     emptyView = (CustomTextView) mainView.findViewById(R.id.contact_empty_view);
+    backTextView = (CustomTextView) mainView.findViewById(R.id.back_text_view);
+    backButton = (ImageView) mainView.findViewById(R.id.arrow_right);
   }
 
   @Override public void setListeners() {
@@ -91,6 +94,18 @@ public class SelectContactFragment extends BaseFragment {
           ((HomeActivity) getActivity()).setSelectedContactEntity(selectedContact);
           getActivity().onBackPressed();
         }
+      }
+    });
+
+    backButton.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
+      }
+    });
+
+    backTextView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        getActivity().onBackPressed();
       }
     });
 
