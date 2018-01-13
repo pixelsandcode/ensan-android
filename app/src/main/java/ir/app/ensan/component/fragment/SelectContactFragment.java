@@ -86,7 +86,7 @@ public class SelectContactFragment extends BaseFragment {
 
   private void searchContacts(String query) {
 
-    if (query.isEmpty()){
+    if (query.isEmpty()) {
       filteredContacts.addAll(allContacts);
       setContact();
     }
@@ -94,8 +94,8 @@ public class SelectContactFragment extends BaseFragment {
     filteredContacts.clear();
 
     for (ContactEntity contactEntity : allContacts) {
-      if (contactEntity.getName().contains(query) || contactEntity.getPhoneNumber()
-          .contains(query)) {
+      if (contactEntity.getName().toLowerCase().contains(query.toLowerCase())
+          || contactEntity.getPhoneNumber().contains(query)) {
         filteredContacts.add(contactEntity);
       }
     }

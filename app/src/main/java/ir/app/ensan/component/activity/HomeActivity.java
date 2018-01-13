@@ -325,6 +325,16 @@ public class HomeActivity extends BaseActivity {
         });
   }
 
+  public void showResendSmsSnackBar(final ContactEntity contactEntity) {
+    SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
+        String.format(getString(R.string.resend_sms_description), contactEntity.getName()), true,
+        getString(R.string.send), new View.OnClickListener() {
+          @Override public void onClick(View view) {
+            ContactManager.getInstance(HomeActivity.this).sendMessage(contactEntity, smsListener);
+          }
+        });
+  }
+
   public void setSelectedContactEntity(ContactEntity selectedContactEntity) {
     this.selectedContactEntity = selectedContactEntity;
     sendGuardianData();

@@ -95,14 +95,15 @@ public class AddGuardianActivity extends BaseActivity {
       }
 
       @Override public void onSmsNotSent(ContactEntity contactEntity) {
+        ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
+        handler.post(runnable);
         SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
             Snackbar.LENGTH_LONG,
             String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true,
             getString(R.string.send_again), new View.OnClickListener() {
               @Override public void onClick(View view) {
                 checkSmsPermission();
-                ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
-                handler.post(runnable);
+
               }
             });
       }

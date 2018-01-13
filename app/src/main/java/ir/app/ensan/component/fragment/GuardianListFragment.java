@@ -2,7 +2,6 @@ package ir.app.ensan.component.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -91,23 +90,13 @@ public class GuardianListFragment extends BaseFragment {
 
     guardianListener = new GuardianListener() {
       @Override public void onGuardianClick(ContactEntity contactEntity) {
-        showResendSmsSnackBar(contactEntity);
+        ((HomeActivity) getActivity()).showResendSmsSnackBar(contactEntity);
       }
 
       @Override public void onAddGuardianClick() {
         ((HomeActivity) getActivity()).openSelectContactFragment();
       }
     };
-  }
-
-  private void showResendSmsSnackBar(final ContactEntity contactEntity) {
-    SnackUtil.makeSnackBar(getActivity(), mainView, Snackbar.LENGTH_INDEFINITE,
-        String.format(getString(R.string.resend_sms_description), contactEntity.getName()), false,
-        getString(R.string.send), new View.OnClickListener() {
-          @Override public void onClick(View view) {
-            // ContactManager.getInstance(getActivity()).sendMessage(contactEntity);
-          }
-        });
   }
 
   private void getGuardianList() {
