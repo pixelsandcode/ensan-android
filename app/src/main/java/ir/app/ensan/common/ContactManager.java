@@ -184,8 +184,8 @@ public class ContactManager {
       smsManager.sendMultipartTextMessage(contactEntity.getPhoneNumber(), null, parts, null, null);
       smsListener.onSmsSent(contactEntity);
     } catch (Exception ex) {
-      smsListener.onSmsNotSent(contactEntity);
       ex.printStackTrace();
+      smsListener.onSmsNotSent(contactEntity);
     }
   }
 }
