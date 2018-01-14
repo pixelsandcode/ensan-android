@@ -14,6 +14,7 @@ public class EnsanApp extends Application {
   public static final String sharedPreferenceKey = "ensan";
 
   private static Context appContext;
+  private static boolean appInForeground = false;
 
   private static Typeface iranSansTypeface;
   private static Typeface iranSansBoldTypeface;
@@ -47,5 +48,13 @@ public class EnsanApp extends Application {
 
   public static Context getAppContext() {
     return appContext;
+  }
+
+  public static boolean isAppInForeground() {
+    return appInForeground;
+  }
+
+  public static void setAppInForeground(boolean appInForeground) {
+    EnsanApp.appInForeground = appInForeground;
   }
 }

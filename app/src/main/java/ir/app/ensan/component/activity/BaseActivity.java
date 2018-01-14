@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import com.afollestad.materialdialogs.MaterialDialog;
+import ir.app.ensan.EnsanApp;
 import ir.app.ensan.R;
 import ir.app.ensan.common.FirebaseAnalyticManager;
 import ir.app.ensan.component.abstraction.AbstractActivity;
@@ -43,6 +44,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Abstract
 
   @Override protected void onResume() {
     super.onResume();
+    EnsanApp.setAppInForeground(true);
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    EnsanApp.setAppInForeground(false);
   }
 
   public void showProgressDialog() {
