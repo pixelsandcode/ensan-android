@@ -1,5 +1,8 @@
 package ir.app.ensan.component.fragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -69,7 +72,7 @@ public class SelectContactFragment extends BaseFragment {
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     initRecycleView();
-    allContacts = ContactManager.getInstance(getActivity()).getAllContacts();
+    getAllContacts();
     filteredContacts.addAll(allContacts);
     setContact();
   }
@@ -200,6 +203,16 @@ public class SelectContactFragment extends BaseFragment {
   @Override public void setRecycleAdapter() {
     contactSelectAdapter = new ContactSelectAdapter(getActivity(), contactSelectListener);
     recycleView.setAdapter(contactSelectAdapter);
+  }
+
+  private void getAllContacts(){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        && getActivity().checkSelfPermission(Manifest.permission.READ_CONTACTS)
+        != PackageManager.PERMISSION_GRANTED) {
+      return;
+    }
+
+    allContacts = ContactManager.getInstance(getActivity()).getAllContacts();
   }
 
   private void setContact() {

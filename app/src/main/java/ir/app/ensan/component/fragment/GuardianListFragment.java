@@ -98,7 +98,7 @@ public class GuardianListFragment extends BaseFragment {
       }
 
       @Override public void onAddGuardianClick() {
-        ((HomeActivity) getActivity()).openSelectContactFragment();
+        ((HomeActivity) getActivity()).openContact();
       }
     };
   }

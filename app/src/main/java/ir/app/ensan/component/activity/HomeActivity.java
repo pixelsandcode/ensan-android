@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -51,11 +52,13 @@ public class HomeActivity extends BaseActivity {
 
   private SmsListener smsListener;
 
+  private Handler handler;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
     fragmentManager = getSupportFragmentManager();
-
+    handler = new Handler();
     openMainFragment();
     //checkCallPermission();
     sendNotificationToken();
@@ -385,7 +388,7 @@ public class HomeActivity extends BaseActivity {
       }
     } else if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        openSelectContactFragment();
+        handler.postDelayed(runnable, 10);
       }
     }
   }
@@ -442,6 +445,12 @@ public class HomeActivity extends BaseActivity {
     this.selectedContactEntity = selectedContactEntity;
     sendGuardianData();
   }
+
+  private Runnable runnable = new Runnable() {
+    @Override public void run() {
+      openSelectContactFragment();
+    }
+  };
 
   enum Requests {
     SEND_SAFE_NOTIFICATION, SEND_WARNING_NOTIFICATION, SEND_NOTIFICATION_TOKEN, SEND_GUARDIAN_DATA;

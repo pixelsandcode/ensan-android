@@ -27,6 +27,11 @@ public abstract class AddGuardianCallback<T> implements Callback<T> {
 
       baseResponse = NetworkUtil.parseError(response.errorBody());
 
+      if (baseResponse.getStatusCode() == 401){
+        onTokenExpire(call, response);
+        return;
+      }
+
       if (baseResponse.getStatusCode() == 409){
         onGuardianAddBefore(call,response);
         return;
