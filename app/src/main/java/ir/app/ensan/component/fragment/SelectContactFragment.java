@@ -158,7 +158,7 @@ public class SelectContactFragment extends BaseFragment {
       }
 
       @Override public void onContactDeSelect(ContactEntity contactEntity) {
-        //selectedContact = null;
+        selectedContact = null;
         //selectedIndex = -1;
         //notifyRecycleAdapter();
       }

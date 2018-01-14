@@ -41,6 +41,8 @@ public class ContactViewHolder extends CustomRecycleViewHolder {
 
   @Override public void bind(Object model, final int position) {
 
+    this.setIsRecyclable(false);
+
     if (!(model instanceof ContactEntity)) {
       return;
     }

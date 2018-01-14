@@ -22,6 +22,7 @@ import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.response.GuardianListResponse;
 import ir.app.ensan.model.network.response.LoginResponse;
+import ir.app.ensan.util.NetworkUtil;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
 import java.util.ArrayList;
@@ -103,6 +104,14 @@ public class GuardianListFragment extends BaseFragment {
   }
 
   private void getGuardianList() {
+
+    if (!NetworkUtil.isInternetConnected()){
+      guardianList.addAll(ContactManager.getInstance(getActivity()).getGuardians());
+      guardianListAdapter.setGuardianList(guardianList);
+      notifyRecycleAdapter();
+      return;
+    }
+
     showProgressDialog();
     NetworkRequestManager.getInstance().callGuardianList(new AppCallback() {
       @Override public void onRequestSuccess(Call call, Response response) {
