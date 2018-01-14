@@ -41,7 +41,8 @@ public class HomeActivity extends BaseActivity {
 
   private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
   private static final int PERMISSIONS_REQUEST_SMS = 1002;
-  private static final int PERMISSIONS_REQUEST_CALL = 1003;
+  private static final int PERMISSIONS_REQUEST_SMS_STATUS = 1003;
+  private static final int PERMISSIONS_REQUEST_CALL = 1005;
 
   private FragmentManager fragmentManager;
   private FragmentTransaction transaction;
@@ -53,6 +54,8 @@ public class HomeActivity extends BaseActivity {
   private SmsListener smsListener;
 
   private Handler handler;
+
+  private boolean sendingStatusBySms = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -356,6 +359,19 @@ public class HomeActivity extends BaseActivity {
     }
   }
 
+  public void checkSmsPermissionForSendStatus(boolean safe) {
+
+    sendingStatusBySms = safe;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+      requestPermissions(new String[] { Manifest.permission.SEND_SMS },
+          PERMISSIONS_REQUEST_SMS_STATUS);
+    } else {
+      sendStatusMessage(safe);
+    }
+  }
+
   @Override public void onBackPressed() {
 
     if (fragmentManager.getBackStackEntryCount() == 1) {
@@ -384,7 +400,11 @@ public class HomeActivity extends BaseActivity {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         ContactManager.getInstance(this).sendInvitationMessage(selectedContactEntity, smsListener);
       } else {
-        showSendSmsSnack();
+        //showSendSmsSnack();
+      }
+    } else if (requestCode == PERMISSIONS_REQUEST_SMS_STATUS) {
+      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        sendStatusMessage(sendingStatusBySms);
       }
     } else if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -431,12 +451,12 @@ public class HomeActivity extends BaseActivity {
   }
 
   public void showResendSmsSnackBar(final ContactEntity contactEntity) {
+    selectedContactEntity = contactEntity;
     SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
         String.format(getString(R.string.resend_sms_description), contactEntity.getName()), true,
         getString(R.string.send), new View.OnClickListener() {
           @Override public void onClick(View view) {
-            ContactManager.getInstance(HomeActivity.this)
-                .sendInvitationMessage(contactEntity, smsListener);
+            checkSmsPermission();
           }
         });
   }

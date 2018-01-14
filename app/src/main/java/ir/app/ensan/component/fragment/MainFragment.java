@@ -99,7 +99,7 @@ public class MainFragment extends BaseFragment {
         if (NetworkUtil.isInternetConnected()) {
           ((HomeActivity) getActivity()).sendNotify(true);
         } else {
-          ((HomeActivity) getActivity()).sendStatusMessage(true);
+          ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(true);
         }
       }
     });
@@ -111,9 +111,9 @@ public class MainFragment extends BaseFragment {
         } else {
           if (NetworkUtil.isInternetConnected()) {
             ((HomeActivity) getActivity()).sendNotify(false);
-            ((HomeActivity) getActivity()).sendStatusMessage(false);
+            ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
           } else {
-            ((HomeActivity) getActivity()).sendStatusMessage(false);
+            ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
           }
 
         }
