@@ -12,7 +12,7 @@ import retrofit2.Response;
  * Created by k.monem on 1/18/2017.
  */
 
-public abstract class AddGuardianCallback<T> implements Callback<T> {
+public abstract class LoginCallback<T> implements Callback<T> {
 
   private BaseResponse baseResponse;
 
@@ -26,12 +26,8 @@ public abstract class AddGuardianCallback<T> implements Callback<T> {
     if (!response.isSuccessful()) {
 
       baseResponse = NetworkUtil.parseError(response.errorBody());
-
-      if (baseResponse.getStatusCode() == 409){
-        onGuardianAddBefore(call,response);
-        return;
-      }
       onRequestFail(call, response);
+      return;
     }
 
     baseResponse = (BaseResponse) response.body();
@@ -52,11 +48,7 @@ public abstract class AddGuardianCallback<T> implements Callback<T> {
 
   public abstract void onRequestSuccess(Call<T> call, Response<T> response);
 
-  public abstract void onGuardianAddBefore(Call<T> call, Response<T> response);
-
   public abstract void onRequestFail(Call<T> call, Response<T> response);
-
-  public abstract void onTokenExpire(Call<T> call, Response<T> response);
 
   public abstract void onRequestTimeOut(Call<T> call, Throwable t);
 

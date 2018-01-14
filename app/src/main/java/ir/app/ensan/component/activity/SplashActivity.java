@@ -9,7 +9,7 @@ import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.common.NotificationManager;
 import ir.app.ensan.component.fragment.AddUserFragment;
 import ir.app.ensan.model.network.NetworkRequestManager;
-import ir.app.ensan.model.network.callback.AppCallback;
+import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
@@ -79,7 +79,7 @@ public class SplashActivity extends BaseActivity {
   };
 
   public void loginUser(String phoneNumber) {
-    NetworkRequestManager.getInstance().callLogin(phoneNumber, new AppCallback() {
+    NetworkRequestManager.getInstance().callLogin(phoneNumber, new LoginCallback() {
       @Override public void onRequestSuccess(Call call, Response response) {
 
         dismissProgressDialog();

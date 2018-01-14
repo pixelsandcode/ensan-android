@@ -2,6 +2,7 @@ package ir.app.ensan.model.network;
 
 import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
+import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
 import ir.app.ensan.model.network.request.NotifyRequest;
 import ir.app.ensan.model.network.response.AddDeviceResponse;
@@ -55,7 +56,7 @@ public class NetworkRequestManager {
     signUpCallback.enqueue(callback);
   }
 
-  public void callLogin(String mobile, AppCallback callback) {
+  public void callLogin(String mobile, LoginCallback callback) {
     Call<LoginResponse> loginCall;
 
     if (auth.isEmpty()){

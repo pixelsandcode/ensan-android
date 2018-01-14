@@ -19,7 +19,10 @@ import ir.app.ensan.component.view.CustomTextView;
 import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.callback.AppCallback;
+import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.response.GuardianListResponse;
+import ir.app.ensan.model.network.response.LoginResponse;
+import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
 import java.util.ArrayList;
 import retrofit2.Call;
@@ -120,6 +123,10 @@ public class GuardianListFragment extends BaseFragment {
         notifyRecycleAdapter();
       }
 
+      @Override public void onTokenExpire(Call call, Response response) {
+        loginUser();
+      }
+
       @Override public void onRequestFail(Call call, Response response) {
         dismissProgressDialog();
         SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView, false);
@@ -133,6 +140,47 @@ public class GuardianListFragment extends BaseFragment {
       @Override public void onNullResponse(Call call) {
         dismissProgressDialog();
         SnackUtil.makeNetworkDisconnectSnackBar(getActivity(), mainView, false);
+      }
+    });
+  }
+
+  public void loginUser() {
+    showProgressDialog();
+    NetworkRequestManager.getInstance()
+        .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
+            new LoginCallback() {
+              @Override public void onRequestSuccess(Call call, Response response) {
+                dismissProgressDialog();
+                LoginResponse loginResponse = (LoginResponse) response.body();
+
+                if (loginResponse.getData().getSuccess()) {
+                  getGuardianList();
+                } else {
+                  showLoginFailedSnack();
+                }
+              }
+
+              @Override public void onRequestFail(Call call, Response response) {
+                dismissProgressDialog();
+                showLoginFailedSnack();
+              }
+
+              @Override public void onRequestTimeOut(Call call, Throwable t) {
+                dismissProgressDialog();
+                showLoginFailedSnack();
+              }
+
+              @Override public void onNullResponse(Call call) {
+                dismissProgressDialog();
+                showLoginFailedSnack();
+              }
+            });
+  }
+
+  private void showLoginFailedSnack() {
+    SnackUtil.makeLoginFailedSnackBar(getActivity(), mainView, false, new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        loginUser();
       }
     });
   }

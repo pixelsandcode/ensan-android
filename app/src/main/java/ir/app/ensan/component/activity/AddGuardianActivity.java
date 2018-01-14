@@ -27,6 +27,7 @@ import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
+import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
 import ir.app.ensan.model.network.response.GuardianListResponse;
 import ir.app.ensan.model.network.response.LoginResponse;
@@ -206,7 +207,7 @@ public class AddGuardianActivity extends BaseActivity {
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
-            new AppCallback() {
+            new LoginCallback() {
               @Override public void onRequestSuccess(Call call, Response response) {
 
                 dismissProgressDialog();
@@ -262,6 +263,10 @@ public class AddGuardianActivity extends BaseActivity {
 
       }
 
+      @Override public void onTokenExpire(Call call, Response response) {
+
+      }
+
       @Override public void onRequestTimeOut(Call call, Throwable t) {
 
       }
@@ -294,6 +299,10 @@ public class AddGuardianActivity extends BaseActivity {
                         checkSmsPermission();
                       }
                     });
+              }
+
+              @Override public void onTokenExpire(Call call, Response response) {
+
               }
 
               @Override public void onRequestFail(Call call, Response response) {
@@ -336,6 +345,10 @@ public class AddGuardianActivity extends BaseActivity {
                 }
               }
 
+              @Override public void onTokenExpire(Call call, Response response) {
+
+              }
+
               @Override public void onRequestFail(Call call, Response response) {
                 dismissProgressDialog();
                 SnackUtil.makeNetworkDisconnectSnackBar(AddGuardianActivity.this,
@@ -371,6 +384,10 @@ public class AddGuardianActivity extends BaseActivity {
       }
 
       @Override public void onRequestFail(Call call, Response response) {
+
+      }
+
+      @Override public void onTokenExpire(Call call, Response response) {
 
       }
 

@@ -74,6 +74,7 @@
 
   <string name="internet_disconnect">اتصال خود به اینترنت را بررسی کنید</string>
   <string name="network_setting">تنظیمات شبکه</string>
+  <string name="retry">تلاش مجدد</string>
   <string name="back">برگشت</string>
 
   <string name="call">تماس</string>

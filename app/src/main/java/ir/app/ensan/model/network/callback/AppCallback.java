@@ -26,6 +26,12 @@ public abstract class AppCallback<T> implements Callback<T> {
     if (!response.isSuccessful()) {
 
       baseResponse = NetworkUtil.parseError(response.errorBody());
+
+      if (baseResponse.getStatusCode() == 401){
+        onTokenExpire(call,response);
+        return;
+      }
+
       onRequestFail(call, response);
       return;
     }
@@ -49,6 +55,8 @@ public abstract class AppCallback<T> implements Callback<T> {
   public abstract void onRequestSuccess(Call<T> call, Response<T> response);
 
   public abstract void onRequestFail(Call<T> call, Response<T> response);
+
+  public abstract void onTokenExpire(Call<T> call, Response<T> response);
 
   public abstract void onRequestTimeOut(Call<T> call, Throwable t);
 

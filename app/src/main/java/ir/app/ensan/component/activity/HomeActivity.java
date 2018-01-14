@@ -13,6 +13,7 @@ import android.view.View;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.abstraction.SmsListener;
+import ir.app.ensan.component.fragment.AddUserFragment;
 import ir.app.ensan.component.fragment.GuardianListFragment;
 import ir.app.ensan.component.fragment.MainFragment;
 import ir.app.ensan.component.fragment.SelectContactFragment;
@@ -22,7 +23,9 @@ import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
+import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.request.NotifyRequest;
+import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.model.network.response.NotifyResponse;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
@@ -128,6 +131,10 @@ public class HomeActivity extends BaseActivity {
         }
       }
 
+      @Override public void onTokenExpire(Call call, Response response) {
+        loginUser(safe ? Requests.SEND_SAFE_NOTIFICATION : Requests.SEND_WARNING_NOTIFICATION);
+      }
+
       @Override public void onRequestFail(Call call, Response response) {
         dismissProgressDialog();
         SnackUtil.makeNetworkDisconnectSnackBar(HomeActivity.this, getWindow().getDecorView());
@@ -164,6 +171,10 @@ public class HomeActivity extends BaseActivity {
         //  SharedPreferencesUtil.saveBoolean(
         //      AppMessagingIdService.NOTIFICATION_TOKEN_CHANGE_KEY, false);
         //}
+      }
+
+      @Override public void onTokenExpire(Call call, Response response) {
+        loginUser(Requests.SEND_NOTIFICATION_TOKEN);
       }
 
       @Override public void onRequestFail(Call call, Response response) {
@@ -203,18 +214,84 @@ public class HomeActivity extends BaseActivity {
                     });
               }
 
+              @Override public void onTokenExpire(Call call, Response response) {
+                loginUser(Requests.SEND_GUARDIAN_DATA);
+              }
+
               @Override public void onRequestFail(Call call, Response response) {
                 dismissProgressDialog();
+                SnackUtil.makeNetworkDisconnectSnackBar(HomeActivity.this,
+                    getWindow().getDecorView());
               }
 
               @Override public void onRequestTimeOut(Call call, Throwable t) {
                 dismissProgressDialog();
+                SnackUtil.makeNetworkDisconnectSnackBar(HomeActivity.this,
+                    getWindow().getDecorView());
               }
 
               @Override public void onNullResponse(Call call) {
                 dismissProgressDialog();
+                SnackUtil.makeNetworkDisconnectSnackBar(HomeActivity.this,
+                    getWindow().getDecorView());
               }
             });
+  }
+
+  public void loginUser(final Requests requests) {
+    showProgressDialog();
+    NetworkRequestManager.getInstance()
+        .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
+            new LoginCallback() {
+              @Override public void onRequestSuccess(Call call, Response response) {
+
+                dismissProgressDialog();
+                LoginResponse loginResponse = (LoginResponse) response.body();
+
+                if (loginResponse.getData().getSuccess()) {
+                  switch (requests) {
+                    case SEND_SAFE_NOTIFICATION:
+                      sendNotify(true);
+                      break;
+                    case SEND_WARNING_NOTIFICATION:
+                      sendNotify(false);
+                      break;
+                    case SEND_NOTIFICATION_TOKEN:
+                      sendNotificationToken();
+                      break;
+                    case SEND_GUARDIAN_DATA:
+                      sendGuardianData();
+                      break;
+                  }
+                } else {
+                  showLoginFailedSnack(requests);
+                }
+              }
+
+              @Override public void onRequestFail(Call call, Response response) {
+                dismissProgressDialog();
+                showLoginFailedSnack(requests);
+              }
+
+              @Override public void onRequestTimeOut(Call call, Throwable t) {
+                dismissProgressDialog();
+                showLoginFailedSnack(requests);
+              }
+
+              @Override public void onNullResponse(Call call) {
+                dismissProgressDialog();
+                showLoginFailedSnack(requests);
+              }
+            });
+  }
+
+  private void showLoginFailedSnack(final Requests requests) {
+    SnackUtil.makeLoginFailedSnackBar(HomeActivity.this, getWindow().getDecorView(), false,
+        new View.OnClickListener() {
+          @Override public void onClick(View view) {
+            loginUser(requests);
+          }
+        });
   }
 
   public void openContact() {
@@ -338,5 +415,9 @@ public class HomeActivity extends BaseActivity {
   public void setSelectedContactEntity(ContactEntity selectedContactEntity) {
     this.selectedContactEntity = selectedContactEntity;
     sendGuardianData();
+  }
+
+  enum Requests {
+    SEND_SAFE_NOTIFICATION, SEND_WARNING_NOTIFICATION, SEND_NOTIFICATION_TOKEN, SEND_GUARDIAN_DATA;
   }
 }

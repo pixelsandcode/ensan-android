@@ -68,7 +68,8 @@ public class SnackUtil {
     //snack.show();
   }
 
-  public static void makeNetworkDisconnectSnackBar(final Context context, View view,boolean useParams) {
+  public static void makeNetworkDisconnectSnackBar(final Context context, View view,
+      boolean useParams) {
     makeSnackBar(context, view, Snackbar.LENGTH_LONG,
         context.getString(R.string.internet_disconnect), useParams,
         context.getString(R.string.network_setting), new View.OnClickListener() {
@@ -78,6 +79,7 @@ public class SnackUtil {
           }
         });
   }
+
   public static void makeNetworkDisconnectSnackBar(final Context context, View view) {
     makeSnackBar(context, view, Snackbar.LENGTH_LONG,
         context.getString(R.string.internet_disconnect), true,
@@ -87,6 +89,13 @@ public class SnackUtil {
             context.startActivity(intent);
           }
         });
+  }
+
+  public static void makeLoginFailedSnackBar(final Context context, View view,boolean useParams,
+      View.OnClickListener onClickListener) {
+    makeSnackBar(context, view, Snackbar.LENGTH_LONG,
+        context.getString(R.string.internet_disconnect), useParams,
+        context.getString(R.string.retry), onClickListener);
   }
 
   @SuppressLint("NewApi") private static int getSoftButtonsBarHeight(Context context) {
