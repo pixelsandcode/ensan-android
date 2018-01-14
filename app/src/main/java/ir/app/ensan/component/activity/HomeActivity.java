@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.telephony.SmsManager;
 import android.view.View;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
@@ -29,6 +30,9 @@ import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.model.network.response.NotifyResponse;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
+import ir.app.ensan.util.TimeUtil;
+import java.util.ArrayList;
+import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -103,6 +107,27 @@ public class HomeActivity extends BaseActivity {
   public void openGuardianListFragment() {
     GuardianListFragment guardianListFragment = GuardianListFragment.newInstance(true);
     setFragment(guardianListFragment);
+  }
+
+  public void sendStatusMessage(boolean safe) {
+    String text =
+        String.format(getString(safe ? R.string.safe_description : R.string.in_danger_description),
+            SharedPreferencesUtil.loadString(AddUserFragment.USER_NAME_KEY, ""),
+            TimeUtil.getFormattedTime(new Date()));
+    try {
+      SmsManager smsManager = SmsManager.getDefault();
+      ArrayList<String> parts = smsManager.divideMessage(text);
+
+      for (ContactEntity contactEntity : ContactManager.getInstance(this).getGuardians()) {
+        smsManager.sendMultipartTextMessage(contactEntity.getPhoneNumber(), null, parts, null,
+            null);
+      }
+
+      SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
+          getString(R.string.your_status_sms_sent), true);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   public void sendNotify(final boolean safe) {
@@ -324,7 +349,7 @@ public class HomeActivity extends BaseActivity {
         && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
       requestPermissions(new String[] { Manifest.permission.SEND_SMS }, PERMISSIONS_REQUEST_SMS);
     } else {
-      ContactManager.getInstance(this).sendMessage(selectedContactEntity, smsListener);
+      ContactManager.getInstance(this).sendInvitationMessage(selectedContactEntity, smsListener);
     }
   }
 
@@ -354,7 +379,7 @@ public class HomeActivity extends BaseActivity {
       }
     } else if (requestCode == PERMISSIONS_REQUEST_SMS) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        ContactManager.getInstance(this).sendMessage(selectedContactEntity, smsListener);
+        ContactManager.getInstance(this).sendInvitationMessage(selectedContactEntity, smsListener);
       } else {
         showSendSmsSnack();
       }
@@ -407,7 +432,8 @@ public class HomeActivity extends BaseActivity {
         String.format(getString(R.string.resend_sms_description), contactEntity.getName()), true,
         getString(R.string.send), new View.OnClickListener() {
           @Override public void onClick(View view) {
-            ContactManager.getInstance(HomeActivity.this).sendMessage(contactEntity, smsListener);
+            ContactManager.getInstance(HomeActivity.this)
+                .sendInvitationMessage(contactEntity, smsListener);
           }
         });
   }

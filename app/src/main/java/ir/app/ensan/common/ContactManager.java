@@ -176,7 +176,7 @@ public class ContactManager {
     selectedContacts.size();
   }
 
-  public void sendMessage(ContactEntity contactEntity, SmsListener smsListener) {
+  public void sendInvitationMessage(ContactEntity contactEntity, SmsListener smsListener) {
     try {
       SmsManager smsManager = SmsManager.getDefault();
       ArrayList<String> parts =

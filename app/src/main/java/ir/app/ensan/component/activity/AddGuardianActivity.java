@@ -472,7 +472,7 @@ public class AddGuardianActivity extends BaseActivity {
         && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
       requestPermissions(new String[] { Manifest.permission.SEND_SMS }, PERMISSIONS_REQUEST_SMS);
     } else {
-      ContactManager.getInstance(this).sendMessage(selectedContactEntity, smsListener);
+      ContactManager.getInstance(this).sendInvitationMessage(selectedContactEntity, smsListener);
     }
   }
 
@@ -517,7 +517,7 @@ public class AddGuardianActivity extends BaseActivity {
       }
     } else if (requestCode == PERMISSIONS_REQUEST_SMS) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        ContactManager.getInstance(this).sendMessage(selectedContactEntity, smsListener);
+        ContactManager.getInstance(this).sendInvitationMessage(selectedContactEntity, smsListener);
       } else {
         showSendSmsSnack();
       }

@@ -14,6 +14,7 @@ import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.activity.HomeActivity;
 import ir.app.ensan.component.view.CustomTextView;
+import ir.app.ensan.util.NetworkUtil;
 import ir.app.ensan.util.SharedPreferencesUtil;
 
 import static ir.app.ensan.R.id.safe_view;
@@ -56,7 +57,6 @@ public class MainFragment extends BaseFragment {
         ContactManager.getInstance(getActivity()).getSelectedContacts().size()));
 
     firstDangerNotification = SharedPreferencesUtil.loadBoolean(SEND_DANGER_WARNING_KEY, true);
-
   }
 
   private void showWarningDialog() {
@@ -96,7 +96,11 @@ public class MainFragment extends BaseFragment {
 
     safe.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        ((HomeActivity) getActivity()).sendNotify(true);
+        if (NetworkUtil.isInternetConnected()) {
+          ((HomeActivity) getActivity()).sendNotify(true);
+        } else {
+          ((HomeActivity) getActivity()).sendStatusMessage(true);
+        }
       }
     });
 
@@ -105,7 +109,13 @@ public class MainFragment extends BaseFragment {
         if (firstDangerNotification) {
           showWarningDialog();
         } else {
-          ((HomeActivity) getActivity()).sendNotify(false);
+          if (NetworkUtil.isInternetConnected()) {
+            ((HomeActivity) getActivity()).sendNotify(false);
+            ((HomeActivity) getActivity()).sendStatusMessage(false);
+          } else {
+            ((HomeActivity) getActivity()).sendStatusMessage(false);
+          }
+
         }
       }
     });
@@ -133,6 +143,5 @@ public class MainFragment extends BaseFragment {
         ((HomeActivity) getActivity()).openGuardianListFragment();
       }
     });
-
   }
 }

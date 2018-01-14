@@ -43,6 +43,8 @@
   <string name="please_enter_your_name">لطفاً نام کامل خود را وارد کنید</string>
   <string name="please_enter_your_phone_number">لطفاً شماره تلفن خود را وارد کنید</string>
 
+  <string name="your_status_sms_sent">پیامک وضعییت شما به سرپرستان تان ارسال شد</string>
+
   <string name="user_name_hint">نام کامل شما</string>
   <string name="user_phone_hint">شماره موبایل</string>
 

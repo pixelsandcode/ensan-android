@@ -32,6 +32,11 @@ public class SplashActivity extends BaseActivity {
 
     scheduleNotifications();
     handler = new Handler();
+
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
     handler.postDelayed(runnable, 2000);
   }
 
@@ -97,16 +102,19 @@ public class SplashActivity extends BaseActivity {
       @Override public void onRequestFail(Call call, Response response) {
         dismissProgressDialog();
         SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this, getWindow().getDecorView());
+        openHomeActivity();
       }
 
       @Override public void onRequestTimeOut(Call call, Throwable t) {
         dismissProgressDialog();
         SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this, getWindow().getDecorView());
+        openHomeActivity();
       }
 
       @Override public void onNullResponse(Call call) {
         dismissProgressDialog();
         SnackUtil.makeNetworkDisconnectSnackBar(SplashActivity.this, getWindow().getDecorView());
+        openHomeActivity();
       }
     });
   }

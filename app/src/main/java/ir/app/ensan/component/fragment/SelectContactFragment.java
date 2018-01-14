@@ -182,7 +182,7 @@ public class SelectContactFragment extends BaseFragment {
         getString(R.string.send_sms_description), false, getString(R.string.send),
         new View.OnClickListener() {
           @Override public void onClick(View view) {
-            //((AddGuardianActivity) getActivity()).sendMessage(selectedContact);
+            //((AddGuardianActivity) getActivity()).sendInvitationMessage(selectedContact);
             //getActivity().onBackPressed();
           }
         });
