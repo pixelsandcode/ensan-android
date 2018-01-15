@@ -57,6 +57,7 @@
       android:layout_marginLeft="32dp"
       android:layout_marginRight="32dp"
       android:layout_marginTop="32dp"
+      android:singleLine="true"
       android:gravity="center"
       android:hint="@string/user_name_hint"
       android:textColor="@color/white"
