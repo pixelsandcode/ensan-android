@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.activity.HomeActivity;
@@ -64,6 +65,7 @@ public class MainFragment extends BaseFragment {
         .content(R.string.send_in_danger_status_warning)
         .positiveText(R.string.ok)
         .negativeText(R.string.cancel)
+        .theme(Theme.LIGHT)
         .onPositive(new MaterialDialog.SingleButtonCallback() {
           @Override
           public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

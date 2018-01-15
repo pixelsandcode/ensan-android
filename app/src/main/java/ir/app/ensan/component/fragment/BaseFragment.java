@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import ir.app.ensan.R;
 import ir.app.ensan.common.FirebaseAnalyticManager;
 import ir.app.ensan.component.abstraction.AbstractFragment;
@@ -49,6 +50,7 @@ public abstract class BaseFragment extends Fragment implements AbstractFragment 
     progressDialog = new MaterialDialog.Builder(getActivity()).content(R.string.please_wait)
         .cancelable(false)
         .progress(true, 0)
+        .theme(Theme.LIGHT)
         .build();
   }
 

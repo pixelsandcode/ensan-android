@@ -88,6 +88,8 @@
   <string name="guardians">سرپرست ها</string>
 
   <string name="search">جستجو</string>
+  <string name="new_general_notification">یک پیام جدید دریافت شد</string>
+  <string name="general_notification_action">مشاهده</string>
 
   <string-array name="main_titles">
     <item>انسان</item>

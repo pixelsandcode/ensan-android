@@ -6,6 +6,7 @@ import android.os.Bundle;
 import ir.app.ensan.common.FireBaseManager;
 import ir.app.ensan.common.NotificationManager;
 import ir.app.ensan.component.receiver.FirebaseDataReceiver;
+import ir.app.ensan.util.LogUtil;
 
 public class AppMessagingService extends IntentService {
 
@@ -18,6 +19,8 @@ public class AppMessagingService extends IntentService {
   public static final String NOTIFICATION_SAFE_STATUS_KEY = "healthy";
   public static final String NOTIFICATION_DANGER_STATUS_KEY = "inDanger";
   public static final String NOTIFICATION_PENDING_GUARDIAN_KEY = "notifyInviter";
+  public static final String NOTIFICATION_GENERAL_TITLE = "title";
+  public static final String NOTIFICATION_GENERAL_BODY = "body";
 
   public AppMessagingService() {
     super("AppMessagingService");
@@ -28,17 +31,10 @@ public class AppMessagingService extends IntentService {
     FireBaseManager.getInstance().init();
     Bundle notificationData = intent.getBundleExtra(NOTIFICATION_DATA);
 
-    //LogUtil.logI("type", notificationData.getString("type"));
-    //LogUtil.logI("location",notificationData.getString("location"));
-    //LogUtil.logI("userKey", notificationData.getString("userKey"));
-    //LogUtil.logI("name", notificationData.getString("name"));
-    //LogUtil.logI("mobile", notificationData.getString("mobile"));
-    //LogUtil.logI("at", notificationData.getString("at"));
-
     String type = notificationData.getString(NOTIFICATION_TYPE_KEY);
 
     if (type == null) {
-      return;
+      type = "";
     }
 
     switch (type) {
@@ -60,6 +56,13 @@ public class AppMessagingService extends IntentService {
                 notificationData.getString(NOTIFICATION_PENDING_GUARDIAN_NAME_KEY));
         break;
       default:
+        LogUtil.logI("general title",notificationData.getString(NOTIFICATION_GENERAL_TITLE));
+        LogUtil.logI("general body",notificationData.getString(NOTIFICATION_GENERAL_BODY));
+
+        Intent activityIntent = new Intent("android.intent.action.MAIN");
+        activityIntent.putExtra(NOTIFICATION_DATA,notificationData);
+
+        sendBroadcast(activityIntent);
         break;
     }
 
