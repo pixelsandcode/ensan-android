@@ -77,7 +77,7 @@ public class AddGuardianActivity extends BaseActivity {
     registerComplete = SharedPreferencesUtil.loadBoolean(REGISTER_COMPLETE_KEY, false);
 
     if (!ContactManager.getInstance(this).isAnyContactExist()) {
-      openAddFirstGuardianFragment();
+      openAddUserFragment();
     } else {
       contacts = ContactManager.getInstance(this).getSelectedContacts();
       openNextFragment();
@@ -104,7 +104,6 @@ public class AddGuardianActivity extends BaseActivity {
             getString(R.string.send_again), new View.OnClickListener() {
               @Override public void onClick(View view) {
                 checkSmsPermission();
-
               }
             });
       }
@@ -152,11 +151,8 @@ public class AddGuardianActivity extends BaseActivity {
     ContactManager.getInstance(this).setSelectedContacts(contacts);
     selectedContactEntity = contactEntity;
 
-    if (!registerComplete) {
-      openAddUserFragment();
-    } else {
       sendGuardianData();
-    }
+
   }
 
   public void sendUserData() {
@@ -171,10 +167,9 @@ public class AddGuardianActivity extends BaseActivity {
                 SignUpResponse signUpResponse = (SignUpResponse) response.body();
 
                 NetworkRequestManager.getInstance().saveAuthKey(signUpResponse.getData().getAuth());
-                registerComplete = true;
-                SharedPreferencesUtil.saveBoolean(REGISTER_COMPLETE_KEY, true);
-                sendGuardianData();
                 sendNotificationToken();
+                handler.post(runnable);
+
               }
 
               @Override public void onRequestFail(Call call, Response response) {
@@ -254,7 +249,7 @@ public class AddGuardianActivity extends BaseActivity {
         ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
         ContactManager.getInstance(AddGuardianActivity.this).loadContacts();
 
-        if (login){
+        if (login) {
           handler.post(runnable);
         }
       }
@@ -369,7 +364,6 @@ public class AddGuardianActivity extends BaseActivity {
             });
   }
 
-
   public void sendNotificationToken() {
 
     String token =
@@ -402,9 +396,17 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   private void openNextFragment() {
+
+    if (registerComplete){
+      openHomeActivity();
+    }
+
     int contactCount = contacts.size();
 
     switch (contactCount) {
+      case 0:
+        openAddFirstGuardianFragment();
+        break;
       case 1:
         openSecondGuardianFragment();
         break;
