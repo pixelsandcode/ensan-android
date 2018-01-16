@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
@@ -13,7 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
+import android.view.WindowManager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import ir.app.ensan.EnsanApp;
@@ -41,18 +40,18 @@ public abstract class BaseActivity extends AppCompatActivity implements Abstract
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
+    //requestWindowFeature(Window.FEATURE_NO_TITLE);
+    getWindow().setSoftInputMode(
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     getExtra();
 
-    progressDialog = new MaterialDialog.Builder(this).content(R.string.please_wait)
-        .cancelable(false)
-        .progress(true, 0)
-        .theme(Theme.LIGHT)
-        .build();
+    initProgressDialog();
+    sendFireBaseEvent();
+    initGeneralNotificationReceiver();
+  }
 
-    FirebaseAnalyticManager.getInstance(this).sendActivityViewEvent(this);
-
+  private void initGeneralNotificationReceiver() {
     appBroadcastReceiver = new BroadcastReceiver() {
       @Override public void onReceive(Context context, final Intent intent) {
 
@@ -83,6 +82,18 @@ public abstract class BaseActivity extends AppCompatActivity implements Abstract
     };
   }
 
+  private void sendFireBaseEvent() {
+    FirebaseAnalyticManager.getInstance(this).sendActivityViewEvent(this);
+  }
+
+  private void initProgressDialog() {
+    progressDialog = new MaterialDialog.Builder(this).content(R.string.please_wait)
+        .cancelable(false)
+        .progress(true, 0)
+        .theme(Theme.LIGHT)
+        .build();
+  }
+
   @Override protected void onResume() {
     super.onResume();
     EnsanApp.setAppInForeground(true);
@@ -107,9 +118,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Abstract
     super.onPostCreate(savedInstanceState, persistentState);
   }
 
-  @Override public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-  }
+  //@Override public void onConfigurationChanged(Configuration newConfig) {
+  //  super.onConfigurationChanged(newConfig);
+  //}
 
   @Override public void onBackPressed() {
     super.onBackPressed();
