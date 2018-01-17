@@ -28,6 +28,7 @@
   <string name="add_guardian">افزودن سرپرست</string>
   <string name="home_sub_title2">شما %d نفر افزوده اید</string>
   <string name="phone_number_not_valid">شماره ی تلفن همراه معتبر نیست</string>
+  <string name="self_guardian_forbidden">شما نمی توانید خود را به عنوان سرپرست انتخاب کنید</string>
 
   <string name="contact_sms_sent">پیام شما به %s ارسال شد</string>
   <string name="contact_sms_not_sent">پیام شما به %s ارسال نشد</string>

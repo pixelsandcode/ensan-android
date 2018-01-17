@@ -151,8 +151,7 @@ public class AddGuardianActivity extends BaseActivity {
     ContactManager.getInstance(this).setSelectedContacts(contacts);
     selectedContactEntity = contactEntity;
 
-      sendGuardianData();
-
+    sendGuardianData();
   }
 
   public void sendUserData() {
@@ -169,7 +168,6 @@ public class AddGuardianActivity extends BaseActivity {
                 NetworkRequestManager.getInstance().saveAuthKey(signUpResponse.getData().getAuth());
                 sendNotificationToken();
                 handler.post(runnable);
-
               }
 
               @Override public void onRequestFail(Call call, Response response) {
@@ -296,6 +294,12 @@ public class AddGuardianActivity extends BaseActivity {
                     });
               }
 
+              @Override public void onSelfGuardianAdded(Call call, Response response) {
+                dismissProgressDialog();
+                SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
+                    Snackbar.LENGTH_LONG, getString(R.string.self_guardian_forbidden), true);
+              }
+
               @Override public void onTokenExpire(Call call, Response response) {
 
               }
@@ -397,7 +401,7 @@ public class AddGuardianActivity extends BaseActivity {
 
   private void openNextFragment() {
 
-    if (registerComplete){
+    if (registerComplete) {
       openHomeActivity();
     }
 

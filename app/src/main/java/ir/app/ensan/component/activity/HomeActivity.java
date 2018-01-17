@@ -245,6 +245,12 @@ public class HomeActivity extends BaseActivity {
                     });
               }
 
+              @Override public void onSelfGuardianAdded(Call call, Response response) {
+                dismissProgressDialog();
+                SnackUtil.makeSnackBar(HomeActivity.this, getWindow().getDecorView(),
+                    Snackbar.LENGTH_LONG, getString(R.string.self_guardian_forbidden), true);
+              }
+
               @Override public void onTokenExpire(Call call, Response response) {
                 loginUser(Requests.SEND_GUARDIAN_DATA);
               }

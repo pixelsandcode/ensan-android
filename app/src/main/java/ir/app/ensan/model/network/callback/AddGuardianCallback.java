@@ -32,6 +32,11 @@ public abstract class AddGuardianCallback<T> implements Callback<T> {
         return;
       }
 
+      if (baseResponse.getStatusCode() == 405){
+        onSelfGuardianAdded(call, response);
+        return;
+      }
+
       if (baseResponse.getStatusCode() == 409){
         onGuardianAddBefore(call,response);
         return;
@@ -60,6 +65,8 @@ public abstract class AddGuardianCallback<T> implements Callback<T> {
   public abstract void onGuardianAddBefore(Call<T> call, Response<T> response);
 
   public abstract void onRequestFail(Call<T> call, Response<T> response);
+
+  public abstract void onSelfGuardianAdded(Call<T> call, Response<T> response);
 
   public abstract void onTokenExpire(Call<T> call, Response<T> response);
 
