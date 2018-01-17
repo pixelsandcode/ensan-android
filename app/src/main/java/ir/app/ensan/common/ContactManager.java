@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import ir.app.ensan.R;
 import ir.app.ensan.component.abstraction.SmsListener;
+import ir.app.ensan.component.fragment.AddUserFragment;
 import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import java.util.ArrayList;
@@ -79,7 +80,8 @@ public class ContactManager {
       phoneNumber = phoneNumber.replaceAll("\\s+", "");
       phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
 
-      if (contactAlreadyExist(contactEntities,phoneNumber) || contactAlreadySelected(phoneNumber)) {
+      if (contactAlreadyExist(contactEntities, phoneNumber) || contactAlreadySelected(
+          phoneNumber) || isSelfContact(phoneNumber)) {
         continue;
       }
 
@@ -111,7 +113,8 @@ public class ContactManager {
     return selectedContacts;
   }
 
-  private boolean contactAlreadyExist(ArrayList<ContactEntity> contactEntities,String phoneNumber) {
+  private boolean contactAlreadyExist(ArrayList<ContactEntity> contactEntities,
+      String phoneNumber) {
     phoneNumber = deletePrefix(phoneNumber);
     for (ContactEntity contactEntity : contactEntities) {
       if (phoneNumber.equals(deletePrefix(contactEntity.getPhoneNumber()))) {
@@ -129,6 +132,14 @@ public class ContactManager {
       }
     }
     return false;
+  }
+
+  private boolean isSelfContact(String phoneNumber) {
+    String selfContact =
+        deletePrefix(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""));
+    phoneNumber = deletePrefix(phoneNumber);
+
+    return selfContact.equals(phoneNumber);
   }
 
   private String deletePrefix(String phoneNumber) {
