@@ -76,12 +76,11 @@ public class AddGuardianActivity extends BaseActivity {
 
     registerComplete = SharedPreferencesUtil.loadBoolean(REGISTER_COMPLETE_KEY, false);
 
-    if (!ContactManager.getInstance(this).isAnyContactExist()) {
-      openAddUserFragment();
-    } else {
+    if (ContactManager.getInstance(this).isAnyContactExist()) {
       contacts = ContactManager.getInstance(this).getSelectedContacts();
-      openNextFragment();
     }
+
+    openAddFirstGuardianFragment();
   }
 
   @Override public void setListeners() {
@@ -135,7 +134,7 @@ public class AddGuardianActivity extends BaseActivity {
     setFragment(guardianListFragment);
   }
 
-  private void openAddUserFragment() {
+  public void openAddUserFragment() {
     AddUserFragment addUserFragment = AddUserFragment.newInstance();
     setFragment(addUserFragment);
   }
@@ -409,7 +408,7 @@ public class AddGuardianActivity extends BaseActivity {
 
     switch (contactCount) {
       case 0:
-        openAddFirstGuardianFragment();
+        openContact();
         break;
       case 1:
         openSecondGuardianFragment();
@@ -425,8 +424,9 @@ public class AddGuardianActivity extends BaseActivity {
 
   private void openHomeActivity() {
     Intent intent = new Intent(this, HomeActivity.class);
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(intent);
+    finish();
   }
 
   private void setFragment(Fragment fragment) {

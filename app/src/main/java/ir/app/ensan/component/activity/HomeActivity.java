@@ -410,7 +410,7 @@ public class HomeActivity extends BaseActivity {
   @Override public void onBackPressed() {
 
     if (fragmentManager.getBackStackEntryCount() == 1) {
-      finish();
+      android.os.Process.killProcess(android.os.Process.myPid());
     } else {
       super.onBackPressed();
     }

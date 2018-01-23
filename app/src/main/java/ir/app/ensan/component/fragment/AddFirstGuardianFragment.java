@@ -49,7 +49,7 @@ public class AddFirstGuardianFragment extends BaseFragment {
 
     addButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        ((AddGuardianActivity) getActivity()).openContact();
+        ((AddGuardianActivity) getActivity()).openAddUserFragment();
       }
     });
   }
