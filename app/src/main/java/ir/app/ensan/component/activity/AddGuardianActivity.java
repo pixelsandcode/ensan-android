@@ -29,6 +29,7 @@ import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
+import ir.app.ensan.model.network.callback.VerifyCallback;
 import ir.app.ensan.model.network.response.GuardianListResponse;
 import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.model.network.response.SignUpResponse;
@@ -329,7 +330,7 @@ public class AddGuardianActivity extends BaseActivity {
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callVerify(pin, SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
-            new AppCallback() {
+            new VerifyCallback() {
               @Override public void onRequestSuccess(Call call, Response response) {
 
                 dismissProgressDialog();
@@ -345,8 +346,10 @@ public class AddGuardianActivity extends BaseActivity {
                 }
               }
 
-              @Override public void onTokenExpire(Call call, Response response) {
-
+              @Override public void onVerificationCodeInvalid(Call call, Response response) {
+                dismissProgressDialog();
+                SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
+                    Snackbar.LENGTH_LONG, getString(R.string.invalid_code), true);
               }
 
               @Override public void onRequestFail(Call call, Response response) {

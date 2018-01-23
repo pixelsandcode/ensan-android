@@ -4,6 +4,7 @@ import ir.app.ensan.model.network.callback.AddGuardianCallback;
 import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
+import ir.app.ensan.model.network.callback.VerifyCallback;
 import ir.app.ensan.model.network.request.NotifyRequest;
 import ir.app.ensan.model.network.response.AddDeviceResponse;
 import ir.app.ensan.model.network.response.AddGuardianResponse;
@@ -67,7 +68,7 @@ public class NetworkRequestManager {
     loginCall.enqueue(callback);
   }
 
-  public void callVerify(String pin, String mobile, AppCallback callback) {
+  public void callVerify(String pin, String mobile, VerifyCallback callback) {
     Call<VerificationResponse> verifyCall = userService.verify(pin, mobile);
     verifyCall.enqueue(callback);
   }

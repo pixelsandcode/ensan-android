@@ -27,10 +27,12 @@
   <string name="add_first_guardian_sub_title2">کسی از شما با خبر نخواهد شد</string>
   <string name="add_guardian">افزودن مراقب</string>
   <string name="home_sub_title2">شما %d نفر افزوده اید</string>
+  <string name="user_name_not_valid">نام صحیح را وارد کنید</string>
   <string name="phone_number_not_valid">شماره ی تلفن همراه معتبر نیست</string>
   <string name="self_guardian_forbidden">شما نمی توانید خود را به عنوان مراقب انتخاب کنید</string>
   <string name="turn_on_location">موقعیت مکانی برای مواقع خطر لازم است تا برای مراقبانتان فرستاده شود</string>
   <string name="guardian_list_alert">برای ارسال دوباره ی دعوت روی اسم شخص کلیک کنید</string>
+  <string name="invalid_code">کد تایید صحیح نیست</string>
 
   <string name="contact_sms_sent">پیام شما به %s ارسال شد</string>
   <string name="contact_sms_not_sent">پیام شما به %s ارسال نشد</string>

@@ -107,9 +107,18 @@ public class AddUserFragment extends BaseFragment {
 
     if (userName.isEmpty()) {
       SnackUtil.makeSnackBar(getActivity(), mainView, Snackbar.LENGTH_LONG,
-          getString(R.string.please_enter_your_name), false);
+          getString(R.string.user_name_not_valid), false);
       return;
     }
+
+    //Pattern namePattern =
+    //    Pattern.compile("^([a-zA-Z]{2,}\\\\s[a-zA-z]{1,}’?-?[a-zA-Z]{2,}\\\\s?([a-zA-Z]{1,})?)");
+    //Matcher nameMatcher = namePattern.matcher(userName);
+    //if (!nameMatcher.find()) {
+    //  SnackUtil.makeSnackBar(getActivity(), mainView, Snackbar.LENGTH_LONG,
+    //      getString(R.string.user_name_not_valid), false);
+    //  return;
+    //}
 
     if (phoneNumber.isEmpty()) {
       SnackUtil.makeSnackBar(getActivity(), mainView, Snackbar.LENGTH_LONG,
@@ -117,9 +126,10 @@ public class AddUserFragment extends BaseFragment {
       return;
     }
 
-    Pattern p = Pattern.compile("^(0|\\+[1-9][0-9]{0,4})[0-9]{7,10}$");
-    Matcher m = p.matcher(phoneNumber);
-    if (!m.find()) {
+
+    Pattern phonePattern = Pattern.compile("^(0|\\+[1-9][0-9]{0,4})[0-9]{7,10}$");
+    Matcher phoneMatcher = phonePattern.matcher(phoneNumber);
+    if (!phoneMatcher.find()) {
       SnackUtil.makeSnackBar(getActivity(), mainView, Snackbar.LENGTH_LONG,
           getString(R.string.phone_number_not_valid), false);
       return;
