@@ -105,6 +105,11 @@ public class NetworkRequestManager {
   }
 
   public void saveAuthKey(String authKey) {
+
+    if (authKey == null || authKey.isEmpty()){
+      return;
+    }
+
     this.auth = authKey;
     SharedPreferencesUtil.saveString(AUTH_KEY, authKey);
   }

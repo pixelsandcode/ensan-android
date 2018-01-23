@@ -105,7 +105,7 @@ public class GuardianListFragment extends BaseFragment {
 
   private void getGuardianList() {
 
-    if (!NetworkUtil.isInternetConnected()){
+    if (!NetworkUtil.isInternetConnected()) {
       guardianList.addAll(ContactManager.getInstance(getActivity()).getGuardians());
       guardianListAdapter.setGuardianList(guardianList);
       notifyRecycleAdapter();
@@ -163,6 +163,8 @@ public class GuardianListFragment extends BaseFragment {
                 LoginResponse loginResponse = (LoginResponse) response.body();
 
                 if (loginResponse.getData().getSuccess()) {
+                  SharedPreferencesUtil.saveString(AddUserFragment.USER_NAME_KEY,
+                      loginResponse.getData().getName());
                   getGuardianList();
                 } else {
                   showLoginFailedSnack();

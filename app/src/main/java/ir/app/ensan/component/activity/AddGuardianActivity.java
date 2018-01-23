@@ -206,6 +206,8 @@ public class AddGuardianActivity extends BaseActivity {
                 LoginResponse loginResponse = (LoginResponse) response.body();
 
                 if (loginResponse.getData().getSuccess()) {
+                  SharedPreferencesUtil.saveString(AddUserFragment.USER_NAME_KEY,
+                      loginResponse.getData().getName());
                   openVerificationFragment();
                 }
               }

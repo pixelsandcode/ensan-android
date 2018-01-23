@@ -32,7 +32,6 @@ public class SplashActivity extends BaseActivity {
 
     scheduleNotifications();
     handler = new Handler();
-
   }
 
   @Override protected void onResume() {
@@ -91,6 +90,8 @@ public class SplashActivity extends BaseActivity {
         LoginResponse loginResponse = (LoginResponse) response.body();
 
         if (loginResponse.getData().getSuccess()) {
+          SharedPreferencesUtil.saveString(AddUserFragment.USER_NAME_KEY,
+              loginResponse.getData().getName());
           if (ContactManager.getInstance(SplashActivity.this).isContactExist()) {
             openHomeActivity();
           } else {
