@@ -10,26 +10,27 @@
 
   <string name="add_guardian_main_title1">افزودن فامیل و دوستان نزدیک</string>
   <string name="add_guardian_sub_title1">افزودن کسانی که شما برایشان مهم هستید</string>
-  <string name="invitation_message">سلام لطفاً برنامه ی Ensan رو دانلود کن. من شما رو به عنوان سرپرست خودم معرفی کردم تا در صورت زمین لرزه یا بروز حادثه از سلامت من با خبر باشید.\n http://ensanapp.ir
+  <string name="invitation_message">سلام لطفاً برنامه ی Ensan رو دانلود کن. من شما رو به عنوان مراقب خودم معرفی کردم تا در صورت زمین لرزه یا بروز حادثه از سلامت من با خبر باشید.\n http://ensanapp.ir
 </string>
 
   <string name="sms_code">کد SMS</string>
 
-  <string name="add_guardian_main_title2">مشاهده ی لیست آشنایان</string>
+  <string name="add_guardian_main_title2">مشاهده ی لیست مراقبان</string>
 
   <string name="contact_permission_description">ما برای اطلاع وضعیت شما به خانواده و آشنایان تان نیاز به شماره تلفن آن ها داریم</string>
   <string name="call_permission_description">لطفاً برای برقرای تماس در زمان اضطراری، اجازه ی تماس بدهید</string>
   <string name="verification_description">حساب کاربری با این شماره وجود دارد. برای دسترسی لطفاً کد ارسال شده از طریق SMS را وارد کنید</string>
-  <string name="send_sms_description">لطفاً برای اطلاع سرپرستان خود به آن ها پیامک ارسال کنید</string>
+  <string name="send_sms_description">لطفاً برای اطلاع مراقبان خود به آن ها پیامک ارسال کنید</string>
   <string name="duplicate_guardian">این مخاطب قبلاً اضافه شده است</string>
   <string name="resend_sms_description">%S هنوز به درخواست شما پاسخ نداده است. برای او دوباره پیام بفرستید</string>
   <string name="add_guardian_sub_title2">برای اطمینان خاطر حداقل %d نفر دیگر را اضافه کنید</string>
   <string name="add_first_guardian_sub_title2">کسی از شما با خبر نخواهد شد</string>
-  <string name="add_guardian">افزودن سرپرست</string>
+  <string name="add_guardian">افزودن مراقب</string>
   <string name="home_sub_title2">شما %d نفر افزوده اید</string>
   <string name="phone_number_not_valid">شماره ی تلفن همراه معتبر نیست</string>
-  <string name="self_guardian_forbidden">شما نمی توانید خود را به عنوان سرپرست انتخاب کنید</string>
-  <string name="turn_on_location">لطفاً برای ارسال موقعیت خود سرویس مکانیابی را فعال کنید</string>
+  <string name="self_guardian_forbidden">شما نمی توانید خود را به عنوان مراقب انتخاب کنید</string>
+  <string name="turn_on_location">موقعیت مکانی برای مواقع خطر لازم است تا برای مراقبانتان فرستاده شود</string>
+  <string name="guardian_list_alert">برای ارسال دوباره ی دعوت روی اسم شخص کلیک کنید</string>
 
   <string name="contact_sms_sent">پیام شما به %s ارسال شد</string>
   <string name="contact_sms_not_sent">پیام شما به %s ارسال نشد</string>
@@ -45,7 +46,7 @@
   <string name="please_enter_your_name">لطفاً نام کامل خود را وارد کنید</string>
   <string name="please_enter_your_phone_number">لطفاً شماره تلفن خود را وارد کنید</string>
 
-  <string name="your_status_sms_sent">پیامک وضعیت شما به سرپرستان تان ارسال شد</string>
+  <string name="your_status_sms_sent">پیامک وضعیت شما به مراقبان تان ارسال شد</string>
 
   <string name="user_name_hint">نام کامل شما</string>
   <string name="user_phone_hint">شماره موبایل</string>
@@ -70,12 +71,12 @@
   <string name="in_danger">در خطر است</string>
 
   <string name="warning">هشدار</string>
-  <string name="no_guardian_warning">شما هیچ کس را به عنوان سرپرست خود انتخاب نکرده اید</string>
+  <string name="no_guardian_warning">شما مراقبی ندارید و در خطر هستید، مراقب جدید اضافه کنید</string>
   <string name="pending_guardian_warning">%S هنوز به در خواست شما پاسخ نداده اند برای مشاهده کلیک کنید</string>
 
-  <string name="send_in_danger_status_warning">شما در حال ارسال یک پیام هشدار برای سرپرستان خود هستید. آیا از ارسال پیام اطمینان دارید؟</string>
+  <string name="send_in_danger_status_warning">شما در حال ارسال یک پیام هشدار برای مراقبان خود هستید. آیا از ارسال پیام اطمینان دارید؟</string>
 
-  <string name="no_contact_exist">هیچ مخاطبی برای سرپرستی وجود ندارد</string>
+  <string name="no_contact_exist">هیچ مخاطبی برای مراقبی وجود ندارد</string>
   <string name="please_wait">لطفاً کمی صبر کنید</string>
 
   <string name="internet_disconnect">اتصال خود به اینترنت را بررسی کنید</string>
@@ -89,7 +90,7 @@
 
   <string name="your_information">اطلاعات شما</string>
   <string name="retrieve_account">بازیابی حساب کاربری</string>
-  <string name="guardians">سرپرست ها</string>
+  <string name="guardians">مراقب ها</string>
 
   <string name="search">جستجو</string>
   <string name="new_general_notification">یک پیام جدید دریافت شد</string>
