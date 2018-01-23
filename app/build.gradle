@@ -55,6 +55,8 @@ dependencies {
   compile "com.google.firebase:firebase-core:${GOOGLE_FIREBASE_VERSION}"
   compile "com.google.firebase:firebase-messaging:${GOOGLE_FIREBASE_VERSION}"
   compile "com.google.firebase:firebase-crash:${GOOGLE_FIREBASE_VERSION}"
+  compile 'com.google.android.gms:play-services-location:10.2.4'
+  compile 'io.nlopez.smartlocation:library:3.2.7'
 
   compile "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
   compile "com.squareup.retrofit2:converter-gson:${RETROFIT_GSON_VERSION}"

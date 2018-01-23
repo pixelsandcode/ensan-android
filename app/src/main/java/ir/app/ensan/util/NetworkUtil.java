@@ -1,6 +1,7 @@
 package ir.app.ensan.util;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
@@ -21,7 +22,7 @@ import retrofit2.Converter;
  */
 public class NetworkUtil {
 
-  public static final String AUT_KEY  = "authorization_key";
+  public static final String AUT_KEY = "authorization_key";
 
   public static boolean isInternetConnected() {
     ConnectivityManager cm = (ConnectivityManager) EnsanApp.getAppContext()
@@ -114,7 +115,33 @@ public class NetworkUtil {
     return "?";
   }
 
+  public static boolean canGetLocation() {
+    boolean result = true;
+    LocationManager locationManager;
+    boolean gpsEnabled = false;
+    boolean networkEnabled = false;
 
+    locationManager =
+        (LocationManager) EnsanApp.getAppContext().getSystemService(Context.LOCATION_SERVICE);
+
+    // exceptions will be thrown if provider is not permitted.
+    try {
+      gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    } catch (Exception ex) {
+
+    }
+    try {
+      networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    } catch (Exception ex) {
+    }
+    if (gpsEnabled == false || networkEnabled == false) {
+      result = false;
+    } else {
+      result = true;
+    }
+
+    return result;
+  }
 
   public static String getIPAddress(boolean useIPv4) {
     try {

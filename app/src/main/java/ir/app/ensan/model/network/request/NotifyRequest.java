@@ -14,7 +14,10 @@ public class NotifyRequest extends BaseRequest {
 
   private NotifyRequest(Builder builder) {
     setType(builder.type);
-    setLocation(builder.location);
+    Location location = new Location();
+    location.lat = builder.lat;
+    location.lon = builder.lon;
+    setLocation(location);
   }
 
   public String getType() {
@@ -57,7 +60,8 @@ public class NotifyRequest extends BaseRequest {
 
   public static final class Builder {
     private String type;
-    private Location location;
+    private double lat;
+    private double lon;
 
     public Builder() {
     }
@@ -67,8 +71,13 @@ public class NotifyRequest extends BaseRequest {
       return this;
     }
 
-    public Builder location(Location val) {
-      location = val;
+    public Builder lat(double val) {
+      lat = val;
+      return this;
+    }
+
+    public Builder lon(double val) {
+      lon = val;
       return this;
     }
 

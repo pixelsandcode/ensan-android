@@ -18,6 +18,7 @@ import ir.app.ensan.component.activity.SplashActivity;
 import ir.app.ensan.component.receiver.NotificationReceiver;
 import ir.app.ensan.util.TimeUtil;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by k.monem on 9/22/2016.
@@ -81,7 +82,7 @@ public class NotificationManager {
 
   public void firePendingGuardianNotification(String pendingNames) {
 
-    if (pendingNames.isEmpty()){
+    if (pendingNames.isEmpty()) {
       return;
     }
 
@@ -141,7 +142,8 @@ public class NotificationManager {
     notificationManager.notify(1, notification);
   }
 
-  public void fireWarningNotification(String name, String time, String phoneNumber) {
+  public void fireWarningNotification(String name, String time, String phoneNumber, String latitude,
+      String longitude) {
 
     Notification notification;
 
@@ -158,12 +160,16 @@ public class NotificationManager {
 
     Intent phoneCall = new Intent(Intent.ACTION_DIAL);
     phoneCall.setData((Uri.parse("tel:" + phoneNumber)));
+
+    String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+
     PendingIntent phoneCallIntent =
         PendingIntent.getActivity(context, 0, phoneCall, PendingIntent.FLAG_CANCEL_CURRENT);
 
-    notificationBuilder.addAction(android.R.drawable.ic_menu_call,
-        context.getString(R.string.call), phoneCallIntent);
-    // notificationBuilder.addAction(android.R.drawable.ic_menu_mapmode, "Show Map", null);
+    notificationBuilder.addAction(android.R.drawable.ic_menu_call, context.getString(R.string.call),
+        phoneCallIntent);
+     notificationBuilder.addAction(android.R.drawable.ic_menu_mapmode, "Show Map", null);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       notificationBuilder.setStyle(
@@ -190,7 +196,7 @@ public class NotificationManager {
   }
 
   private String getSafeNotificationTitle(String name) {
-    return name +" "+ context.getString(R.string.is_safe);
+    return name + " " + context.getString(R.string.is_safe);
   }
 
   private String getSafeNotificationBody(String name, String time) {
@@ -211,19 +217,19 @@ public class NotificationManager {
     ArrayList<String> names = new Gson().fromJson(pendingNames, new TypeToken<ArrayList<String>>() {
     }.getType());
 
-    for (String name : names){
+    for (String name : names) {
       nameString.append(name).append(" ");
     }
 
-    return String.format(context.getString(R.string.pending_guardian_warning), nameString.toString());
+    return String.format(context.getString(R.string.pending_guardian_warning),
+        nameString.toString());
   }
 
-  private String parseDate(String dateString){
+  private String parseDate(String dateString) {
     return TimeUtil.getFormattedDate(dateString);
   }
 
   private int getNotificationId() {
     return (int) System.currentTimeMillis();
   }
-
 }

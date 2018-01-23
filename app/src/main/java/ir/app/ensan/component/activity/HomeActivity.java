@@ -1,12 +1,16 @@
 package ir.app.ensan.component.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +18,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
+import ir.app.ensan.common.LocationManager;
 import ir.app.ensan.component.abstraction.SmsListener;
 import ir.app.ensan.component.fragment.AddUserFragment;
 import ir.app.ensan.component.fragment.GuardianListFragment;
@@ -29,6 +34,7 @@ import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.request.NotifyRequest;
 import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.model.network.response.NotifyResponse;
+import ir.app.ensan.util.NetworkUtil;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
 import ir.app.ensan.util.TimeUtil;
@@ -39,6 +45,7 @@ import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
 
+  private static final int PERMISSIONS_REQUEST_LOCATION = 1000;
   private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
   private static final int PERMISSIONS_REQUEST_SMS = 1002;
   private static final int PERMISSIONS_REQUEST_SMS_STATUS = 1003;
@@ -63,6 +70,7 @@ public class HomeActivity extends BaseActivity {
     fragmentManager = getSupportFragmentManager();
     handler = new Handler();
     openMainFragment();
+    checkLocationPermission();
     //checkCallPermission();
     sendNotificationToken();
   }
@@ -141,7 +149,14 @@ public class HomeActivity extends BaseActivity {
     NotifyRequest notifyRequest;
     NotifyRequest.Builder builder = new NotifyRequest.Builder();
 
+    Location location = LocationManager.getInstance(this).getLocation();
+
     builder.type(safe ? "healthy" : "inDanger");
+
+    if (location != null) {
+      builder.lat(location.getLatitude()).lon(location.getLatitude());
+    }
+
     notifyRequest = builder.build();
 
     NetworkRequestManager.getInstance().callNotifyGuardian(notifyRequest, new AppCallback() {
@@ -335,6 +350,20 @@ public class HomeActivity extends BaseActivity {
     checkContactPermission();
   }
 
+  public void checkLocationPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        && ActivityCompat.checkSelfPermission(HomeActivity.this,
+        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        && ActivityCompat.checkSelfPermission(HomeActivity.this,
+        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+      requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+          PERMISSIONS_REQUEST_LOCATION);
+    } else {
+      makeTurnOnLocationPermissionSnack();
+      LocationManager.getInstance(this);
+    }
+  }
+
   private void checkCallPermission() {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -416,6 +445,12 @@ public class HomeActivity extends BaseActivity {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         handler.postDelayed(runnable, 10);
       }
+    } else if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
+      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        makeTurnOnLocationPermissionSnack();
+        LocationManager.getInstance(this);
+
+      }
     }
   }
 
@@ -434,6 +469,22 @@ public class HomeActivity extends BaseActivity {
     transaction.replace(R.id.fragment_container, fragment, backStateName)
         .addToBackStack(backStateName)
         .commit();
+  }
+
+  private void makeTurnOnLocationPermissionSnack() {
+
+    if (NetworkUtil.canGetLocation()){
+      return;
+    }
+
+    SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
+        getString(R.string.turn_on_location), true, getString(R.string.enabling),
+        new View.OnClickListener() {
+          @Override public void onClick(View view) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+          }
+        });
   }
 
   private void makeCallPermissionSnack() {

@@ -21,6 +21,8 @@ public class AppMessagingService extends IntentService {
   public static final String NOTIFICATION_PENDING_GUARDIAN_KEY = "notifyInviter";
   public static final String NOTIFICATION_GENERAL_TITLE = "title";
   public static final String NOTIFICATION_GENERAL_BODY = "body";
+  public static final String NOTIFICATION_LAT = "lat";
+  public static final String NOTIFICATION_LON = "lon";
 
   public AppMessagingService() {
     super("AppMessagingService");
@@ -47,7 +49,9 @@ public class AppMessagingService extends IntentService {
         NotificationManager.getInstance()
             .fireWarningNotification(notificationData.getString(NOTIFICATION_NAME_KEY),
                 notificationData.getString(NOTIFICATION_TIME_KEY),
-                notificationData.getString(NOTIFICATION_PHONE_NUMBER_KEY));
+                notificationData.getString(NOTIFICATION_PHONE_NUMBER_KEY),
+                notificationData.getString(NOTIFICATION_LAT),
+                notificationData.getString(NOTIFICATION_LON));
         break;
 
       case NOTIFICATION_PENDING_GUARDIAN_KEY:
@@ -56,11 +60,11 @@ public class AppMessagingService extends IntentService {
                 notificationData.getString(NOTIFICATION_PENDING_GUARDIAN_NAME_KEY));
         break;
       default:
-        LogUtil.logI("general title",notificationData.getString(NOTIFICATION_GENERAL_TITLE));
-        LogUtil.logI("general body",notificationData.getString(NOTIFICATION_GENERAL_BODY));
+        LogUtil.logI("general title", notificationData.getString(NOTIFICATION_GENERAL_TITLE));
+        LogUtil.logI("general body", notificationData.getString(NOTIFICATION_GENERAL_BODY));
 
         Intent activityIntent = new Intent("android.intent.action.MAIN");
-        activityIntent.putExtra(NOTIFICATION_DATA,notificationData);
+        activityIntent.putExtra(NOTIFICATION_DATA, notificationData);
 
         sendBroadcast(activityIntent);
         break;
