@@ -1,6 +1,7 @@
 package ir.app.ensan.component.fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,10 +13,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.abstraction.ContactSelectListener;
@@ -122,6 +127,17 @@ public class SelectContactFragment extends BaseFragment {
 
       }
     });
+
+    searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+          closeKeyboard();
+          return true;
+        }
+        return false;
+      }
+    });
+
     confirmButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
 
@@ -205,7 +221,7 @@ public class SelectContactFragment extends BaseFragment {
     recycleView.setAdapter(contactSelectAdapter);
   }
 
-  private void getAllContacts(){
+  private void getAllContacts() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         && getActivity().checkSelfPermission(Manifest.permission.READ_CONTACTS)
         != PackageManager.PERMISSION_GRANTED) {
@@ -228,5 +244,14 @@ public class SelectContactFragment extends BaseFragment {
     recycleView.setEmptyViewVisibility(View.GONE);
     confirmButton.setVisibility(View.VISIBLE);
     notifyRecycleAdapter();
+  }
+
+  private void closeKeyboard() {
+    View view = getActivity().getCurrentFocus();
+    if (view != null) {
+      InputMethodManager imm =
+          (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
   }
 }

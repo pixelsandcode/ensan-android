@@ -2,10 +2,13 @@ package ir.app.ensan.component.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.TextView;
 import ir.app.ensan.R;
 import ir.app.ensan.component.activity.AddGuardianActivity;
 import ir.app.ensan.component.view.CustomButton;
@@ -50,14 +53,17 @@ public class VerificationFragment extends BaseFragment {
   @Override public void setListeners() {
     sendButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        pin = panNameEditText.getText().toString();
+        sendPan();
+      }
+    });
 
-        if (pin.isEmpty()) {
-          //// TODO: 03/01/2018 show snack bar
-          return;
-        } else {
-          ((AddGuardianActivity) getActivity()).sendVerifyRequest(pin);
+    panNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+          sendPan();
+          return true;
         }
+        return false;
       }
     });
 
@@ -72,5 +78,17 @@ public class VerificationFragment extends BaseFragment {
         getActivity().onBackPressed();
       }
     });
+  }
+
+  private void sendPan() {
+
+    pin = panNameEditText.getText().toString();
+
+    if (pin.isEmpty()) {
+      //// TODO: 03/01/2018 show snack bar
+      return;
+    } else {
+      ((AddGuardianActivity) getActivity()).sendVerifyRequest(pin);
+    }
   }
 }

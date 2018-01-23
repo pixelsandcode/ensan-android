@@ -60,6 +60,7 @@
       android:singleLine="true"
       android:theme="@style/EditTextStyle"
       android:textColor="@color/white"
+      android:imeOptions="actionDone"
       />
 
   <ir.app.ensan.component.view.CustomRecycleView

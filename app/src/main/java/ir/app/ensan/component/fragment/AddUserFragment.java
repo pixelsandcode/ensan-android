@@ -3,10 +3,13 @@ package ir.app.ensan.component.fragment;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import ir.app.ensan.BuildConfig;
 import ir.app.ensan.R;
@@ -73,6 +76,26 @@ public class AddUserFragment extends BaseFragment {
     backTextView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         getActivity().onBackPressed();
+      }
+    });
+
+    userNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_NEXT) {
+          phoneNumberEditText.requestFocus();
+          return true;
+        }
+        return false;
+      }
+    });
+
+    phoneNumberEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+          checkValidation();
+          return true;
+        }
+        return false;
       }
     });
   }
