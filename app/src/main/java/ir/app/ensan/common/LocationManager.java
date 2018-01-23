@@ -20,6 +20,8 @@ public class LocationManager implements OnLocationUpdatedListener {
   private LocationGooglePlayServicesProvider provider;
   private Location location = null;
 
+  private boolean locationFound = false;
+
   public static LocationManager getInstance(Context context) {
     if (instance == null) {
       instance = new LocationManager(context);
@@ -27,23 +29,18 @@ public class LocationManager implements OnLocationUpdatedListener {
     return instance;
   }
 
-  public static LocationManager getInstance() {
-    if (instance == null) {
-      instance = new LocationManager();
-    }
-    return instance;
-  }
-
 
   public LocationManager(Context context) {
     this.context = context;
+
+    if (locationFound){
+      return;
+    }
+
     provider = new LocationGooglePlayServicesProvider();
     provider.setCheckLocationSettings(true);
 
     setConfig();
-  }
-
-  public LocationManager() {
   }
 
   private void setConfig() {
@@ -62,7 +59,8 @@ public class LocationManager implements OnLocationUpdatedListener {
   }
 
   @Override public void onLocationUpdated(Location location) {
-
+    locationFound = true;
+    this.location = location;
     LogUtil.logI("new location", location.getLongitude() + " " + location.getLongitude());
   }
 

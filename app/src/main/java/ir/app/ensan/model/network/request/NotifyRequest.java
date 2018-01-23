@@ -14,6 +14,11 @@ public class NotifyRequest extends BaseRequest {
 
   private NotifyRequest(Builder builder) {
     setType(builder.type);
+
+    if (builder.lat == 0 || builder.lon == 0) {
+      return;
+    }
+
     Location location = new Location();
     location.lat = builder.lat;
     location.lon = builder.lon;

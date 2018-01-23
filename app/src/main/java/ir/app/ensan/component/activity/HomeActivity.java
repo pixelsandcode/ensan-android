@@ -155,12 +155,12 @@ public class HomeActivity extends BaseActivity {
     NotifyRequest notifyRequest;
     NotifyRequest.Builder builder = new NotifyRequest.Builder();
 
-    Location location = LocationManager.getInstance().getLocation();
+    Location location = LocationManager.getInstance(this).getLocation();
 
     builder.type(safe ? "healthy" : "inDanger");
 
     if (location != null) {
-      builder.lat(location.getLatitude()).lon(location.getLatitude());
+      builder.lat(location.getLatitude()).lon(location.getLongitude());
     }
 
     notifyRequest = builder.build();
