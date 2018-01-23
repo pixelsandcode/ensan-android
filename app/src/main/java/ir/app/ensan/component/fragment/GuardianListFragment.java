@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.component.abstraction.GuardianListener;
@@ -34,6 +36,8 @@ import retrofit2.Response;
  */
 public class GuardianListFragment extends BaseFragment {
 
+  public static final String GUARDIAN_HELP_DIALOG = "guardian_help";
+
   private CustomRecycleView recycleView;
   private RecyclerView.LayoutManager layoutManager;
   private GuardianListAdapter guardianListAdapter;
@@ -44,6 +48,8 @@ public class GuardianListFragment extends BaseFragment {
 
   private ImageView backButton;
   private CustomTextView backTextView;
+
+  private MaterialDialog helpDialog;
 
   private boolean showAddOther;
 
@@ -68,6 +74,11 @@ public class GuardianListFragment extends BaseFragment {
     guardianList = new ArrayList<>();
     initRecycleView();
     getGuardianList();
+
+    if (SharedPreferencesUtil.loadBoolean(GUARDIAN_HELP_DIALOG, true)) {
+      SharedPreferencesUtil.saveBoolean(GUARDIAN_HELP_DIALOG, false);
+      showGuardianHelpDialog();
+    }
   }
 
   @Override public void registerWidgets() {
@@ -101,6 +112,14 @@ public class GuardianListFragment extends BaseFragment {
         ((HomeActivity) getActivity()).openContact();
       }
     };
+  }
+
+  private void showGuardianHelpDialog() {
+    helpDialog = new MaterialDialog.Builder(getActivity()).title(R.string.attention)
+        .content(R.string.guardian_list_alert)
+        .positiveText(R.string.ok)
+        .theme(Theme.LIGHT)
+        .show();
   }
 
   private void getGuardianList() {

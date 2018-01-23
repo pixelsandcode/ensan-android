@@ -70,6 +70,7 @@
   <string name="location_text" formatted="false">مکان %1s در ساعت %2s</string>
   <string name="in_danger">در خطر است</string>
 
+  <string name="attention">توجه</string>
   <string name="warning">هشدار</string>
   <string name="no_guardian_warning">شما مراقبی ندارید و در خطر هستید، مراقب جدید اضافه کنید</string>
   <string name="pending_guardian_warning">%S هنوز به در خواست شما پاسخ نداده اند برای مشاهده کلیک کنید</string>
