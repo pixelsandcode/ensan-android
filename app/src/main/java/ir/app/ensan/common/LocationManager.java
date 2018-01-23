@@ -4,8 +4,6 @@ import android.content.Context;
 import android.location.Location;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
-import io.nlopez.smartlocation.location.config.LocationAccuracy;
-import io.nlopez.smartlocation.location.config.LocationParams;
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
 import ir.app.ensan.util.LogUtil;
 
@@ -20,7 +18,6 @@ public class LocationManager implements OnLocationUpdatedListener {
   private Context context;
 
   private LocationGooglePlayServicesProvider provider;
-  private LocationParams.Builder builder;
   private Location location = null;
 
   public static LocationManager getInstance(Context context) {
@@ -30,6 +27,14 @@ public class LocationManager implements OnLocationUpdatedListener {
     return instance;
   }
 
+  public static LocationManager getInstance() {
+    if (instance == null) {
+      instance = new LocationManager();
+    }
+    return instance;
+  }
+
+
   public LocationManager(Context context) {
     this.context = context;
     provider = new LocationGooglePlayServicesProvider();
@@ -38,10 +43,10 @@ public class LocationManager implements OnLocationUpdatedListener {
     setConfig();
   }
 
+  public LocationManager() {
+  }
+
   private void setConfig() {
-    builder = new LocationParams.Builder().setAccuracy(LocationAccuracy.LOWEST)
-        .setDistance(0)
-        .setInterval(5000);
 
     LogUtil.logI("locationServicesEnabled",
         SmartLocation.with(context).location().state().locationServicesEnabled() + "");

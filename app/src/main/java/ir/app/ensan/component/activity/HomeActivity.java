@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.telephony.SmsManager;
 import android.view.View;
+import ir.app.ensan.BuildConfig;
 import ir.app.ensan.R;
 import ir.app.ensan.common.ContactManager;
 import ir.app.ensan.common.LocationManager;
@@ -124,6 +125,11 @@ public class HomeActivity extends BaseActivity {
   }
 
   public void sendStatusMessage(boolean safe) {
+
+    if (BuildConfig.STG) {
+      return;
+    }
+
     String text =
         String.format(getString(safe ? R.string.safe_description : R.string.in_danger_description),
             SharedPreferencesUtil.loadString(AddUserFragment.USER_NAME_KEY, ""),
@@ -149,7 +155,7 @@ public class HomeActivity extends BaseActivity {
     NotifyRequest notifyRequest;
     NotifyRequest.Builder builder = new NotifyRequest.Builder();
 
-    Location location = LocationManager.getInstance(this).getLocation();
+    Location location = LocationManager.getInstance().getLocation();
 
     builder.type(safe ? "healthy" : "inDanger");
 
@@ -449,7 +455,6 @@ public class HomeActivity extends BaseActivity {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         makeTurnOnLocationPermissionSnack();
         LocationManager.getInstance(this);
-
       }
     }
   }
@@ -473,11 +478,11 @@ public class HomeActivity extends BaseActivity {
 
   private void makeTurnOnLocationPermissionSnack() {
 
-    if (NetworkUtil.canGetLocation()){
+    if (NetworkUtil.canGetLocation()) {
       return;
     }
 
-    SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
+    SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
         getString(R.string.turn_on_location), true, getString(R.string.enabling),
         new View.OnClickListener() {
           @Override public void onClick(View view) {

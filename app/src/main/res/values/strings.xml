@@ -66,6 +66,7 @@
   <string name="is_safe">سالم است</string>
   <string name="safe_description" formatted="false">%1s می گوید در ساعت %2s سالم است</string>
   <string name="in_danger_description" formatted="false">%1s می گوید در ساعت %2s در خطر است</string>
+  <string name="location_text" formatted="false">مکان %1s در ساعت %2s</string>
   <string name="in_danger">در خطر است</string>
 
   <string name="warning">هشدار</string>
@@ -93,6 +94,7 @@
   <string name="search">جستجو</string>
   <string name="new_general_notification">یک پیام جدید دریافت شد</string>
   <string name="general_notification_action">مشاهده</string>
+  <string name="show_location">نمایش مکان</string>
 
   <string-array name="main_titles">
     <item>انسان</item>

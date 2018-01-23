@@ -18,7 +18,6 @@ import ir.app.ensan.component.activity.SplashActivity;
 import ir.app.ensan.component.receiver.NotificationReceiver;
 import ir.app.ensan.util.TimeUtil;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Created by k.monem on 9/22/2016.
@@ -161,15 +160,29 @@ public class NotificationManager {
     Intent phoneCall = new Intent(Intent.ACTION_DIAL);
     phoneCall.setData((Uri.parse("tel:" + phoneNumber)));
 
-    String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-
     PendingIntent phoneCallIntent =
         PendingIntent.getActivity(context, 0, phoneCall, PendingIntent.FLAG_CANCEL_CURRENT);
 
     notificationBuilder.addAction(android.R.drawable.ic_menu_call, context.getString(R.string.call),
         phoneCallIntent);
-     notificationBuilder.addAction(android.R.drawable.ic_menu_mapmode, "Show Map", null);
+
+    if (latitude != null && longitude != null) {
+
+      String geoUri = "http://maps.google.com/maps?q=loc:"
+          + latitude
+          + ","
+          + longitude
+          + " ("
+          + getLocationText(name, time)
+          + ")";
+      Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+
+      PendingIntent mapPendingIntent =
+          PendingIntent.getActivity(context, 0, mapIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+      notificationBuilder.addAction(android.R.drawable.ic_menu_mapmode,
+          context.getString(R.string.show_location), mapPendingIntent);
+    }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       notificationBuilder.setStyle(
@@ -209,6 +222,10 @@ public class NotificationManager {
 
   private String getWarningNotificationBody(String name, String time) {
     return String.format(context.getString(R.string.in_danger_description), name, parseDate(time));
+  }
+
+  private String getLocationText(String name, String time) {
+    return String.format(context.getString(R.string.location_text), name, parseDate(time));
   }
 
   private String getPendingGuardianNotificationBody(String pendingNames) {
