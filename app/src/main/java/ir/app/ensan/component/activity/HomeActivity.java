@@ -64,6 +64,7 @@ public class HomeActivity extends BaseActivity {
   private Handler handler;
 
   private boolean sendingStatusBySms = false;
+  private boolean locationPermissionNotGranted = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -155,12 +156,14 @@ public class HomeActivity extends BaseActivity {
     NotifyRequest notifyRequest;
     NotifyRequest.Builder builder = new NotifyRequest.Builder();
 
-    Location location = LocationManager.getInstance(this).getLocation();
-
     builder.type(safe ? "healthy" : "inDanger");
 
-    if (location != null) {
-      builder.lat(location.getLatitude()).lon(location.getLongitude());
+    if (!locationPermissionNotGranted) {
+      Location location = LocationManager.getInstance(this).getLocation();
+
+      if (location != null) {
+        builder.lat(location.getLatitude()).lon(location.getLongitude());
+      }
     }
 
     notifyRequest = builder.build();
@@ -364,9 +367,11 @@ public class HomeActivity extends BaseActivity {
         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
         && ActivityCompat.checkSelfPermission(HomeActivity.this,
         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+      locationPermissionNotGranted = true;
       requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
           PERMISSIONS_REQUEST_LOCATION);
     } else {
+      locationPermissionNotGranted = false;
       makeTurnOnLocationPermissionSnack();
       LocationManager.getInstance(this);
     }
@@ -455,8 +460,11 @@ public class HomeActivity extends BaseActivity {
       }
     } else if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        locationPermissionNotGranted = false;
         makeTurnOnLocationPermissionSnack();
         LocationManager.getInstance(this);
+      } else {
+        locationPermissionNotGranted = true;
       }
     }
   }
