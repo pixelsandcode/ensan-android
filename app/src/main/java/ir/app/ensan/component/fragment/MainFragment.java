@@ -70,8 +70,8 @@ public class MainFragment extends BaseFragment {
           @Override
           public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
             firstDangerNotification = false;
-            SharedPreferencesUtil.saveBoolean(SEND_DANGER_WARNING_KEY, firstDangerNotification);
-            ((HomeActivity) getActivity()).sendNotify(false);
+            SharedPreferencesUtil.saveBoolean(SEND_DANGER_WARNING_KEY, false);
+            sendWarningNotify();
           }
         })
         .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -111,13 +111,7 @@ public class MainFragment extends BaseFragment {
         if (firstDangerNotification) {
           showWarningDialog();
         } else {
-          if (NetworkUtil.isInternetConnected()) {
-            ((HomeActivity) getActivity()).sendNotify(false);
-            ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
-          } else {
-            ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
-          }
-
+          sendWarningNotify();
         }
       }
     });
@@ -145,5 +139,14 @@ public class MainFragment extends BaseFragment {
         ((HomeActivity) getActivity()).openGuardianListFragment();
       }
     });
+  }
+
+  private void sendWarningNotify(){
+    if (NetworkUtil.isInternetConnected()) {
+      ((HomeActivity) getActivity()).sendNotify(false);
+      ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
+    } else {
+      ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
+    }
   }
 }
