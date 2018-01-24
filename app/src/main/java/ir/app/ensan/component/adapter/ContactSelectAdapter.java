@@ -22,7 +22,7 @@ public class ContactSelectAdapter extends RecyclerView.Adapter<ContactViewHolder
 
   private ContactSelectListener contactSelectListener;
 
-  public static int selectedIndex = -1;
+  public static ArrayList<Integer> selectedIndex = new ArrayList<>();
 
   public ContactSelectAdapter(Context context,ContactSelectListener contactSelectListener) {
     this.context = context;
@@ -30,7 +30,7 @@ public class ContactSelectAdapter extends RecyclerView.Adapter<ContactViewHolder
     this.layoutInflater = (LayoutInflater)
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     this.contactSelectListener = contactSelectListener;
-    selectedIndex = -1;
+    selectedIndex.clear();
   }
 
   public void setContactEntities(ArrayList<ContactEntity> contactEntities) {

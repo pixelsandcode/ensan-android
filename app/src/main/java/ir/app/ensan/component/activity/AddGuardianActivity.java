@@ -30,6 +30,8 @@ import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
 import ir.app.ensan.model.network.callback.VerifyCallback;
+import ir.app.ensan.model.network.request.AddGuardianRequest;
+import ir.app.ensan.model.network.request.Guardian;
 import ir.app.ensan.model.network.response.GuardianListResponse;
 import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.model.network.response.SignUpResponse;
@@ -38,6 +40,7 @@ import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
 import ir.app.ensan.util.TimeUtil;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import retrofit2.Call;
@@ -56,7 +59,8 @@ public class AddGuardianActivity extends BaseActivity {
   private FragmentManager fragmentManager;
   private FragmentTransaction transaction;
 
-  private ContactEntity selectedContactEntity;
+  private ArrayList<ContactEntity> selectedContacts;
+  private HashMap<String, Boolean> guardianRequestStatus = new HashMap<>();
 
   private SmsListener smsListener;
 
@@ -72,6 +76,7 @@ public class AddGuardianActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_guardian);
     contacts = new HashSet<>();
+    selectedContacts = new ArrayList<>();
     fragmentManager = getSupportFragmentManager();
     handler = new Handler();
 
@@ -89,23 +94,13 @@ public class AddGuardianActivity extends BaseActivity {
     smsListener = new SmsListener() {
       @Override public void onSmsSent(ContactEntity contactEntity) {
         SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
-            Snackbar.LENGTH_LONG,
-            String.format(getString(R.string.contact_sms_sent), contactEntity.getName()), true);
-        ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
-        handler.post(runnable);
+            Snackbar.LENGTH_LONG, getString(R.string.contact_sms_sent), true);
       }
 
-      @Override public void onSmsNotSent(ContactEntity contactEntity) {
-        ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
-        handler.post(runnable);
-        SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
-            Snackbar.LENGTH_LONG,
-            String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true,
-            getString(R.string.send_again), new View.OnClickListener() {
-              @Override public void onClick(View view) {
-                checkSmsPermission();
-              }
-            });
+      @Override public void onSmsNotSent(final ContactEntity contactEntity) {
+        //SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
+            //Snackbar.LENGTH_LONG,
+            //String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true);
       }
     };
   }
@@ -145,13 +140,28 @@ public class AddGuardianActivity extends BaseActivity {
     setFragment(verificationFragment);
   }
 
-  public void addContact(ContactEntity contactEntity) {
+  public void addContact(ArrayList<ContactEntity> contactEntities) {
 
-    contacts.add(contactEntity);
-    ContactManager.getInstance(this).setSelectedContacts(contacts);
-    selectedContactEntity = contactEntity;
+    selectedContacts.addAll(contactEntities);
 
-    sendGuardianData();
+    addGuardians();
+  }
+
+  private void addGuardians() {
+    ArrayList<Guardian> guardianArrayList = new ArrayList<>();
+
+    Guardian.Builder builder;
+
+    for (ContactEntity contactEntity : selectedContacts) {
+      builder = new Guardian.Builder();
+      builder.mobile(contactEntity.getPhoneNumber()).name(contactEntity.getName());
+      guardianArrayList.add(builder.build());
+    }
+
+    AddGuardianRequest.Builder addGuardianBuilder = new AddGuardianRequest.Builder();
+    addGuardianBuilder.guardians(guardianArrayList);
+
+    sendGuardianData(addGuardianBuilder.build());
   }
 
   public void sendUserData() {
@@ -167,7 +177,7 @@ public class AddGuardianActivity extends BaseActivity {
 
                 NetworkRequestManager.getInstance().saveAuthKey(signUpResponse.getData().getAuth());
                 sendNotificationToken();
-                handler.post(runnable);
+                getGuardianList();
               }
 
               @Override public void onRequestFail(Call call, Response response) {
@@ -249,9 +259,7 @@ public class AddGuardianActivity extends BaseActivity {
         ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
         ContactManager.getInstance(AddGuardianActivity.this).loadContacts();
 
-        if (login) {
-          handler.post(runnable);
-        }
+        handler.post(nextFragmentRunnable);
       }
 
       @Override public void onRequestFail(Call call, Response response) {
@@ -272,58 +280,53 @@ public class AddGuardianActivity extends BaseActivity {
     });
   }
 
-  public void sendGuardianData() {
-
+  public void sendGuardianData(AddGuardianRequest addGuardianRequest) {
     showProgressDialog();
     NetworkRequestManager.getInstance()
-        .callAddGuardian(selectedContactEntity.getName(), selectedContactEntity.getPhoneNumber(),
-            new AddGuardianCallback() {
-              @Override public void onRequestSuccess(Call call, Response response) {
-                dismissProgressDialog();
-                checkSmsPermission();
-                getGuardianList();
-              }
+        .callAddGuardian(addGuardianRequest, new AddGuardianCallback() {
+          @Override public void onRequestSuccess(Call call, Response response) {
+            dismissProgressDialog();
+            ContactManager.getInstance(AddGuardianActivity.this)
+                .addSelectedContacts(selectedContacts);
+            ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
+            contacts = ContactManager.getInstance(AddGuardianActivity.this).getSelectedContacts();
+            checkSmsPermission();
+          }
 
-              @Override public void onGuardianAddBefore(Call call, Response response) {
-                dismissProgressDialog();
-                getGuardianList();
-                SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
-                    Snackbar.LENGTH_INDEFINITE, getString(R.string.duplicate_guardian), true,
-                    getString(R.string.understood), new View.OnClickListener() {
-                      @Override public void onClick(View view) {
-                        checkSmsPermission();
-                      }
-                    });
-              }
+          @Override public void onGuardianAddBefore(Call call, Response response) {
+            dismissProgressDialog();
+            SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
+                Snackbar.LENGTH_INDEFINITE, getString(R.string.duplicate_guardian), true);
+          }
 
-              @Override public void onSelfGuardianAdded(Call call, Response response) {
-                dismissProgressDialog();
-                SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
-                    Snackbar.LENGTH_LONG, getString(R.string.self_guardian_forbidden), true);
-              }
+          @Override public void onSelfGuardianAdded(Call call, Response response) {
+            dismissProgressDialog();
+            SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
+                Snackbar.LENGTH_LONG, getString(R.string.self_guardian_forbidden), true);
+          }
 
-              @Override public void onTokenExpire(Call call, Response response) {
+          @Override public void onTokenExpire(Call call, Response response) {
 
-              }
+          }
 
-              @Override public void onRequestFail(Call call, Response response) {
-                dismissProgressDialog();
-                SnackUtil.makeNetworkDisconnectSnackBar(AddGuardianActivity.this,
-                    getWindow().getDecorView());
-              }
+          @Override public void onRequestFail(Call call, Response response) {
+            dismissProgressDialog();
+            SnackUtil.makeNetworkDisconnectSnackBar(AddGuardianActivity.this,
+                getWindow().getDecorView());
+          }
 
-              @Override public void onRequestTimeOut(Call call, Throwable t) {
-                dismissProgressDialog();
-                SnackUtil.makeNetworkDisconnectSnackBar(AddGuardianActivity.this,
-                    getWindow().getDecorView());
-              }
+          @Override public void onRequestTimeOut(Call call, Throwable t) {
+            dismissProgressDialog();
+            SnackUtil.makeNetworkDisconnectSnackBar(AddGuardianActivity.this,
+                getWindow().getDecorView());
+          }
 
-              @Override public void onNullResponse(Call call) {
-                dismissProgressDialog();
-                SnackUtil.makeNetworkDisconnectSnackBar(AddGuardianActivity.this,
-                    getWindow().getDecorView());
-              }
-            });
+          @Override public void onNullResponse(Call call) {
+            dismissProgressDialog();
+            SnackUtil.makeNetworkDisconnectSnackBar(AddGuardianActivity.this,
+                getWindow().getDecorView());
+          }
+        });
   }
 
   public void sendVerifyRequest(String pin) {
@@ -485,7 +488,8 @@ public class AddGuardianActivity extends BaseActivity {
         && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
       requestPermissions(new String[] { Manifest.permission.SEND_SMS }, PERMISSIONS_REQUEST_SMS);
     } else {
-      ContactManager.getInstance(this).sendInvitationMessage(selectedContactEntity, smsListener);
+      handler.post(nextFragmentRunnable);
+      ContactManager.getInstance(this).sendInvitationMessage(selectedContacts, smsListener);
     }
   }
 
@@ -530,14 +534,15 @@ public class AddGuardianActivity extends BaseActivity {
       }
     } else if (requestCode == PERMISSIONS_REQUEST_SMS) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        ContactManager.getInstance(this).sendInvitationMessage(selectedContactEntity, smsListener);
+        handler.post(nextFragmentRunnable);
+        ContactManager.getInstance(this).sendInvitationMessage(selectedContacts, smsListener);
       } else {
-        showSendSmsSnack();
+        //showSendSmsSnack();
       }
     }
   }
 
-  private Runnable runnable = new Runnable() {
+  private Runnable nextFragmentRunnable = new Runnable() {
     @Override public void run() {
       openNextFragment();
     }

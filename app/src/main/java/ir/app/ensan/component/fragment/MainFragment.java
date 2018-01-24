@@ -54,8 +54,6 @@ public class MainFragment extends BaseFragment {
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    guardianCountTextView.setText(String.format(getString(R.string.home_sub_title2),
-        ContactManager.getInstance(getActivity()).getSelectedContacts().size()));
 
     firstDangerNotification = SharedPreferencesUtil.loadBoolean(SEND_DANGER_WARNING_KEY, true);
   }
@@ -91,6 +89,12 @@ public class MainFragment extends BaseFragment {
     seeGuardianListTextView = (CustomTextView) mainView.findViewById(R.id.main_title2);
     guardianCountTextView = (CustomTextView) mainView.findViewById(R.id.sub_title2);
     eyeImageView = (ImageView) mainView.findViewById(R.id.eye_image_view);
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    guardianCountTextView.setText(String.format(getString(R.string.home_sub_title2),
+        ContactManager.getInstance(getActivity()).getSelectedContacts().size()));
   }
 
   @Override public void setListeners() {

@@ -73,12 +73,16 @@ public class GuardianListFragment extends BaseFragment {
     super.onViewCreated(view, savedInstanceState);
     guardianList = new ArrayList<>();
     initRecycleView();
-    getGuardianList();
 
     if (SharedPreferencesUtil.loadBoolean(GUARDIAN_HELP_DIALOG, true)) {
       SharedPreferencesUtil.saveBoolean(GUARDIAN_HELP_DIALOG, false);
       showGuardianHelpDialog();
     }
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    getGuardianList();
   }
 
   @Override public void registerWidgets() {
@@ -105,7 +109,7 @@ public class GuardianListFragment extends BaseFragment {
 
     guardianListener = new GuardianListener() {
       @Override public void onGuardianClick(ContactEntity contactEntity) {
-        ((HomeActivity) getActivity()).showResendSmsSnackBar(contactEntity);
+       // ((HomeActivity) getActivity()).showResendSmsSnackBar(contactEntity);
       }
 
       @Override public void onAddGuardianClick() {

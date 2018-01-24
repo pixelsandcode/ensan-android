@@ -80,8 +80,9 @@ public class ContactManager {
       phoneNumber = phoneNumber.replaceAll("\\s+", "");
       phoneNumber = phoneNumber.replaceAll("[\\s\\-()]", "");
 
-      if (contactAlreadyExist(contactEntities, phoneNumber) || contactAlreadySelected(
-          phoneNumber) || isSelfContact(phoneNumber)) {
+      if (contactAlreadyExist(contactEntities, phoneNumber)
+          || contactAlreadySelected(phoneNumber)
+          || isSelfContact(phoneNumber)) {
         continue;
       }
 
@@ -188,15 +189,28 @@ public class ContactManager {
   }
 
   public void sendInvitationMessage(ContactEntity contactEntity, SmsListener smsListener) {
-    try {
-      SmsManager smsManager = SmsManager.getDefault();
-      ArrayList<String> parts =
-          smsManager.divideMessage(context.getString(R.string.invitation_message));
-      smsManager.sendMultipartTextMessage(contactEntity.getPhoneNumber(), null, parts, null, null);
-      smsListener.onSmsSent(contactEntity);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      smsListener.onSmsNotSent(contactEntity);
+    ArrayList<ContactEntity> contactEntities = new ArrayList<>();
+    contactEntities.add(contactEntity);
+    sendInvitationMessage(contactEntities, smsListener);
+  }
+
+  public void sendInvitationMessage(ArrayList<ContactEntity> contactEntities,
+      SmsListener smsListener) {
+    SmsManager smsManager = SmsManager.getDefault();
+
+    for (ContactEntity contactEntity : contactEntities) {
+
+      try {
+        ArrayList<String> parts =
+            smsManager.divideMessage(context.getString(R.string.invitation_message));
+
+        smsManager.sendMultipartTextMessage(contactEntity.getPhoneNumber(), null, parts, null,
+            null);
+        smsListener.onSmsSent(contactEntity);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        smsListener.onSmsNotSent(contactEntity);
+      }
     }
   }
 }

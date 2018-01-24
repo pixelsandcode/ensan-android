@@ -5,6 +5,7 @@ import ir.app.ensan.model.network.callback.AppCallback;
 import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.callback.RegisterCallback;
 import ir.app.ensan.model.network.callback.VerifyCallback;
+import ir.app.ensan.model.network.request.AddGuardianRequest;
 import ir.app.ensan.model.network.request.NotifyRequest;
 import ir.app.ensan.model.network.response.AddDeviceResponse;
 import ir.app.ensan.model.network.response.AddGuardianResponse;
@@ -60,7 +61,7 @@ public class NetworkRequestManager {
   public void callLogin(String mobile, LoginCallback callback) {
     Call<LoginResponse> loginCall;
 
-    if (auth.isEmpty()){
+    if (auth.isEmpty()) {
       loginCall = userService.login(mobile);
     } else {
       loginCall = userService.login(auth, mobile);
@@ -73,8 +74,9 @@ public class NetworkRequestManager {
     verifyCall.enqueue(callback);
   }
 
-  public void callAddGuardian(String name, String mobile, AddGuardianCallback callback) {
-    Call<AddGuardianResponse> addGuardianCall = guardianService.addGuardian(authorization, name, mobile);
+  public void callAddGuardian(AddGuardianRequest addGuardianRequest, AddGuardianCallback callback) {
+    Call<AddGuardianResponse> addGuardianCall =
+        guardianService.addGuardian(authorization, addGuardianRequest);
     addGuardianCall.enqueue(callback);
   }
 
@@ -90,14 +92,14 @@ public class NetworkRequestManager {
   }
 
   public void callAddDevice(String token, AppCallback callback) {
-    Call<AddDeviceResponse> guardianListCall = userService.addDevice(authorization,token);
+    Call<AddDeviceResponse> guardianListCall = userService.addDevice(authorization, token);
     guardianListCall.enqueue(callback);
   }
 
   public void saveAuthorizationKey(Response response) {
     String authorization = response.headers().get("authorization");
 
-    if (authorization == null || authorization.isEmpty()){
+    if (authorization == null || authorization.isEmpty()) {
       return;
     }
 
@@ -107,7 +109,7 @@ public class NetworkRequestManager {
 
   public void saveAuthKey(String authKey) {
 
-    if (authKey == null || authKey.isEmpty()){
+    if (authKey == null || authKey.isEmpty()) {
       return;
     }
 

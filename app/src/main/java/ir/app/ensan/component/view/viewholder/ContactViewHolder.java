@@ -51,17 +51,18 @@ public class ContactViewHolder extends CustomRecycleViewHolder {
     contactNameTextView.setText(contactEntity.getName());
     contactNumberTextView.setText(contactEntity.getPhoneNumber());
 
-    selectCheckBox.setChecked(position == ContactSelectAdapter.selectedIndex);
+    selectCheckBox.setChecked(ContactSelectAdapter.selectedIndex.indexOf(position) != -1);
 
     selectCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
         if (selected) {
           contactSelectListener.onContactSelect(contactEntity);
-          ContactSelectAdapter.selectedIndex = position;
+          ContactSelectAdapter.selectedIndex.add(position);
         } else {
           contactSelectListener.onContactDeSelect(contactEntity);
+          ContactSelectAdapter.selectedIndex.remove(ContactSelectAdapter.selectedIndex.indexOf(position));
         }
-        selectCheckBox.setEnabled(!selected);
+        //selectCheckBox.setEnabled(!selected);
       }
     });
   }

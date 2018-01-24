@@ -34,7 +34,7 @@
   <string name="guardian_list_alert">برای ارسال دوباره ی دعوت روی اسم شخص کلیک کنید</string>
   <string name="invalid_code">کد تایید صحیح نیست</string>
 
-  <string name="contact_sms_sent">پیام شما به %s ارسال شد</string>
+  <string name="contact_sms_sent">پیام شما به مراقبان تان ارسال شد</string>
   <string name="contact_sms_not_sent">پیام شما به %s ارسال نشد</string>
   <string name="user_status_safe">پیام سلامت شما ارسال شد</string>
   <string name="user_status_in_danger">پیام کمک شما ارسال شد</string>

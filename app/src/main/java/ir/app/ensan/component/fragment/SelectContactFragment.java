@@ -46,7 +46,7 @@ public class SelectContactFragment extends BaseFragment {
 
   private ArrayList<ContactEntity> allContacts = new ArrayList<>();
   private ArrayList<ContactEntity> filteredContacts = new ArrayList<>();
-  private ContactEntity selectedContact;
+  private ArrayList<ContactEntity> selectedContacts = new ArrayList<>();
 
   private ContactSelectListener contactSelectListener;
 
@@ -141,18 +141,18 @@ public class SelectContactFragment extends BaseFragment {
     confirmButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
 
-        if (selectedContact == null) {
+        if (selectedContacts.isEmpty()) {
           SnackUtil.makeSnackBar(getActivity(), mainView, Snackbar.LENGTH_LONG,
               getString(R.string.select_one_at_least), false);
           return;
         }
 
         if (getActivity() instanceof AddGuardianActivity) {
-          ((AddGuardianActivity) getActivity()).addContact(selectedContact);
+          ((AddGuardianActivity) getActivity()).addContact(selectedContacts);
         } else if (getActivity() instanceof HomeActivity) {
 
-          ((HomeActivity) getActivity()).setSelectedContactEntity(selectedContact);
-          getActivity().onBackPressed();
+          ((HomeActivity) getActivity()).setContactEntities(selectedContacts);
+          //getActivity().onBackPressed();
         }
       }
     });
@@ -171,15 +171,15 @@ public class SelectContactFragment extends BaseFragment {
 
     contactSelectListener = new ContactSelectListener() {
       @Override public void onContactSelect(ContactEntity contactEntity) {
-        selectedContact = contactEntity;
+        selectedContacts.add(contactEntity);
         //selectedIndex = allContacts.indexOf(contactEntity);
         notifyRecycleAdapter();
       }
 
       @Override public void onContactDeSelect(ContactEntity contactEntity) {
-        selectedContact = null;
+        selectedContacts.remove(contactEntity);
         //selectedIndex = -1;
-        //notifyRecycleAdapter();
+        notifyRecycleAdapter();
       }
     };
   }
