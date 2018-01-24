@@ -42,6 +42,7 @@ public abstract class AddGuardianCallback<T> implements Callback<T> {
         return;
       }
       onRequestFail(call, response);
+      return;
     }
 
     baseResponse = (BaseResponse) response.body();

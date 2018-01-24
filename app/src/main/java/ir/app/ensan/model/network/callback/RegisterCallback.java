@@ -32,6 +32,7 @@ public abstract class RegisterCallback<T> implements Callback<T> {
         return;
       }
       onRequestFail(call, response);
+      return;
     }
 
     baseResponse = (BaseResponse) response.body();

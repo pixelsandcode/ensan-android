@@ -32,6 +32,7 @@ public abstract class VerifyCallback<T> implements Callback<T> {
         return;
       }
       onRequestFail(call, response);
+      return;
     }
 
     baseResponse = (BaseResponse) response.body();
@@ -42,12 +43,12 @@ public abstract class VerifyCallback<T> implements Callback<T> {
   @Override public void onFailure(Call<T> call, Throwable t) {
 
     if (t instanceof SocketTimeoutException) {
-
+      onRequestTimeOut(call, t);
     } else {
 
     }
 
-    onRequestTimeOut(call, t);
+
   }
 
   public abstract void onRequestSuccess(Call<T> call, Response<T> response);
