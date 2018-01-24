@@ -339,8 +339,10 @@ public class AddGuardianActivity extends BaseActivity {
                 if (verificationResponse.getData().getSuccess()) {
                   NetworkRequestManager.getInstance()
                       .saveAuthKey(verificationResponse.getData().getAuth());
-                  registerComplete = true;
                   SharedPreferencesUtil.saveBoolean(REGISTER_COMPLETE_KEY, true);
+                  SharedPreferencesUtil.saveString(AddUserFragment.USER_NAME_KEY,
+                      verificationResponse.getData().getName());
+                  registerComplete = true;
                   getGuardianList();
                   sendNotificationToken();
                 }

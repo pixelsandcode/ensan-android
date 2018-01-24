@@ -21,16 +21,43 @@ public class VerificationResponse extends BaseResponse {
 
   public class Data {
 
-    @SerializedName("userKey") @Expose private String userKey;
+    @SerializedName("docKey") @Expose private String docKey;
+    @SerializedName("mobile") @Expose private String mobile;
+    @SerializedName("name") @Expose private String name;
+    @SerializedName("state") @Expose private String state;
     @SerializedName("auth") @Expose private String auth;
     @SerializedName("success") @Expose private Boolean success;
 
-    public String getUserKey() {
-      return userKey;
+    public String getDocKey() {
+      return docKey;
     }
 
-    public void setUserKey(String userKey) {
-      this.userKey = userKey;
+    public void setDocKey(String docKey) {
+      this.docKey = docKey;
+    }
+
+    public String getMobile() {
+      return mobile;
+    }
+
+    public void setMobile(String mobile) {
+      this.mobile = mobile;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public String getState() {
+      return state;
+    }
+
+    public void setState(String state) {
+      this.state = state;
     }
 
     public String getAuth() {
