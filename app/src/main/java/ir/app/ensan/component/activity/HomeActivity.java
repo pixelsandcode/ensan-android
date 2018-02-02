@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,6 +55,8 @@ public class HomeActivity extends BaseActivity {
   private static final int PERMISSIONS_REQUEST_SMS_STATUS = 1003;
   private static final int PERMISSIONS_REQUEST_CALL = 1005;
 
+  private static final int SEND_SMS_ACTIVITY_TOKEN = 2018;
+
   private FragmentManager fragmentManager;
   private FragmentTransaction transaction;
   private ArrayList<ContactEntity> contactEntities;
@@ -82,13 +85,14 @@ public class HomeActivity extends BaseActivity {
     super.setListeners();
 
     smsListener = new SmsListener() {
-      @Override public void onSmsSent(ContactEntity contactEntity) {
+      @Override public void onSmsSent() {
         SnackUtil.makeSnackBar(HomeActivity.this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
             getString(R.string.contact_sms_sent), true);
         ContactManager.getInstance(HomeActivity.this).saveContacts();
+        onBackPressed();
       }
 
-      @Override public void onSmsNotSent(ContactEntity contactEntity) {
+      @Override public void onSmsNotSent() {
         //SnackUtil.makeSnackBar(HomeActivity.this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
         //    String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true,
         //    getString(R.string.send_again), new View.OnClickListener() {
@@ -97,6 +101,7 @@ public class HomeActivity extends BaseActivity {
         //      }
         //    });
         ContactManager.getInstance(HomeActivity.this).saveContacts();
+        onBackPressed();
       }
     };
   }
@@ -255,8 +260,7 @@ public class HomeActivity extends BaseActivity {
             dismissProgressDialog();
             ContactManager.getInstance(HomeActivity.this).addSelectedContacts(contactEntities);
             ContactManager.getInstance(HomeActivity.this).saveContacts();
-            checkSmsPermission();
-            onBackPressed();
+            sendInvitationMessage(contactEntities, smsListener);
           }
 
           @Override public void onGuardianAddBefore(Call call, Response response) {
@@ -400,7 +404,7 @@ public class HomeActivity extends BaseActivity {
         && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
       requestPermissions(new String[] { Manifest.permission.SEND_SMS }, PERMISSIONS_REQUEST_SMS);
     } else {
-      ContactManager.getInstance(this).sendInvitationMessage(contactEntities, smsListener);
+
     }
   }
 
@@ -442,11 +446,11 @@ public class HomeActivity extends BaseActivity {
         callPermissionDenied = true;
       }
     } else if (requestCode == PERMISSIONS_REQUEST_SMS) {
-      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        ContactManager.getInstance(this).sendInvitationMessage(contactEntities, smsListener);
-      } else {
-        //showSendSmsSnack();
-      }
+      //if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      //  //ContactManager.getInstance(this).sendInvitationMessage(contactEntities, smsListener);
+      //} else {
+      //  //showSendSmsSnack();
+      //}
     } else if (requestCode == PERMISSIONS_REQUEST_SMS_STATUS) {
       if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         sendStatusMessage(sendingStatusBySms);
@@ -481,6 +485,34 @@ public class HomeActivity extends BaseActivity {
     transaction.replace(R.id.fragment_container, fragment, backStateName)
         .addToBackStack(backStateName)
         .commit();
+  }
+
+  private void sendInvitationMessage(ArrayList<ContactEntity> contactEntities,
+      SmsListener smsListener) {
+
+    StringBuilder smsRecipients = new StringBuilder("smsto:");
+
+    for (ContactEntity contactEntity : contactEntities) {
+      smsRecipients.append(contactEntity.getPhoneNumber()).append(';');
+    }
+
+    try {
+
+      Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(smsRecipients.toString()));
+      smsIntent.putExtra("sms_body", getString(R.string.invitation_message));
+      startActivityForResult(smsIntent, SEND_SMS_ACTIVITY_TOKEN);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      smsListener.onSmsNotSent();
+    }
+  }
+
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == SEND_SMS_ACTIVITY_TOKEN) {
+      smsListener.onSmsSent();
+    }
   }
 
   private void makeTurnOnLocationPermissionSnack() {

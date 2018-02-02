@@ -3,6 +3,7 @@ package ir.app.ensan.component.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,6 +53,8 @@ public class AddGuardianActivity extends BaseActivity {
   private static final int PERMISSIONS_REQUEST_SMS = 1002;
   private static final int BACK_DELAY_TIME = 2000;
 
+  private static final int SEND_SMS_ACTIVITY_TOKEN = 2018;
+
   private static final String REGISTER_COMPLETE_KEY = "register_complete";
 
   private Set<ContactEntity> contacts;
@@ -92,15 +95,15 @@ public class AddGuardianActivity extends BaseActivity {
   @Override public void setListeners() {
     super.setListeners();
     smsListener = new SmsListener() {
-      @Override public void onSmsSent(ContactEntity contactEntity) {
-        SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
-            Snackbar.LENGTH_LONG, getString(R.string.contact_sms_sent), true);
+      @Override public void onSmsSent() {
+        //SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
+        //    Snackbar.LENGTH_LONG, getString(R.string.contact_sms_sent), true);
       }
 
-      @Override public void onSmsNotSent(final ContactEntity contactEntity) {
+      @Override public void onSmsNotSent() {
         //SnackUtil.makeSnackBar(AddGuardianActivity.this, getWindow().getDecorView(),
-            //Snackbar.LENGTH_LONG,
-            //String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true);
+        //Snackbar.LENGTH_LONG,
+        //String.format(getString(R.string.contact_sms_not_sent), contactEntity.getName()), true);
       }
     };
   }
@@ -141,7 +144,7 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   public void addContact(ArrayList<ContactEntity> contactEntities) {
-
+    selectedContacts.clear();
     selectedContacts.addAll(contactEntities);
 
     addGuardians();
@@ -290,7 +293,7 @@ public class AddGuardianActivity extends BaseActivity {
                 .addSelectedContacts(selectedContacts);
             ContactManager.getInstance(AddGuardianActivity.this).saveContacts();
             contacts = ContactManager.getInstance(AddGuardianActivity.this).getSelectedContacts();
-            checkSmsPermission();
+            sendInvitationMessage(selectedContacts, smsListener);
           }
 
           @Override public void onGuardianAddBefore(Call call, Response response) {
@@ -460,15 +463,15 @@ public class AddGuardianActivity extends BaseActivity {
     checkContactPermission();
   }
 
-  private void showSendSmsSnack() {
-    SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
-        getString(R.string.send_sms_description), true, getString(R.string.send),
-        new View.OnClickListener() {
-          @Override public void onClick(View view) {
-            checkSmsPermission();
-          }
-        });
-  }
+  //private void showSendSmsSnack() {
+  //  SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_INDEFINITE,
+  //      getString(R.string.send_sms_description), true, getString(R.string.send),
+  //      new View.OnClickListener() {
+  //        @Override public void onClick(View view) {
+  //          checkSmsPermission();
+  //        }
+  //      });
+  //}
 
   private void checkContactPermission() {
 
@@ -483,13 +486,34 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   private void checkSmsPermission() {
+    //ContactManager.getInstance(this).sendInvitationMessage(selectedContacts, smsListener);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-      requestPermissions(new String[] { Manifest.permission.SEND_SMS }, PERMISSIONS_REQUEST_SMS);
-    } else {
-      handler.post(nextFragmentRunnable);
-      ContactManager.getInstance(this).sendInvitationMessage(selectedContacts, smsListener);
+    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    //    && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+    //  requestPermissions(new String[] { Manifest.permission.SEND_SMS }, PERMISSIONS_REQUEST_SMS);
+    //} else {
+    //  handler.post(nextFragmentRunnable);
+    //  ContactManager.getInstance(this).sendInvitationMessage(selectedContacts, smsListener);
+    //}
+  }
+
+  private void sendInvitationMessage(ArrayList<ContactEntity> contactEntities,
+      SmsListener smsListener) {
+
+    StringBuilder smsRecipients = new StringBuilder("smsto:");
+
+    for (ContactEntity contactEntity : contactEntities) {
+      smsRecipients.append(contactEntity.getPhoneNumber()).append(';');
+    }
+
+    try {
+      Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(smsRecipients.toString()));
+      smsIntent.putExtra("sms_body", getString(R.string.invitation_message));
+      startActivityForResult(smsIntent, SEND_SMS_ACTIVITY_TOKEN);
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      smsListener.onSmsNotSent();
     }
   }
 
@@ -533,12 +557,21 @@ public class AddGuardianActivity extends BaseActivity {
             });
       }
     } else if (requestCode == PERMISSIONS_REQUEST_SMS) {
-      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        handler.post(nextFragmentRunnable);
-        ContactManager.getInstance(this).sendInvitationMessage(selectedContacts, smsListener);
-      } else {
-        //showSendSmsSnack();
-      }
+      //if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      //  handler.post(nextFragmentRunnable);
+      //  ContactManager.getInstance(this).sendInvitationMessage(selectedContacts, smsListener);
+      //} else {
+      //  //showSendSmsSnack();
+      //}
+    }
+  }
+
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == SEND_SMS_ACTIVITY_TOKEN){
+      smsListener.onSmsSent();
+      handler.post(nextFragmentRunnable);
     }
   }
 

@@ -3,11 +3,8 @@ package ir.app.ensan.common;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.telephony.SmsManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import ir.app.ensan.R;
-import ir.app.ensan.component.abstraction.SmsListener;
 import ir.app.ensan.component.fragment.AddUserFragment;
 import ir.app.ensan.model.ContactEntity;
 import ir.app.ensan.util.SharedPreferencesUtil;
@@ -188,29 +185,5 @@ public class ContactManager {
     selectedContacts.size();
   }
 
-  public void sendInvitationMessage(ContactEntity contactEntity, SmsListener smsListener) {
-    ArrayList<ContactEntity> contactEntities = new ArrayList<>();
-    contactEntities.add(contactEntity);
-    sendInvitationMessage(contactEntities, smsListener);
-  }
-
-  public void sendInvitationMessage(ArrayList<ContactEntity> contactEntities,
-      SmsListener smsListener) {
-    SmsManager smsManager = SmsManager.getDefault();
-
-    for (ContactEntity contactEntity : contactEntities) {
-
-      try {
-        ArrayList<String> parts =
-            smsManager.divideMessage(context.getString(R.string.invitation_message));
-
-        smsManager.sendMultipartTextMessage(contactEntity.getPhoneNumber(), null, parts, null,
-            null);
-        smsListener.onSmsSent(contactEntity);
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        smsListener.onSmsNotSent(contactEntity);
-      }
-    }
-  }
 }
+
