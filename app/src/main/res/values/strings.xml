@@ -79,7 +79,7 @@
 
   <string name="send_in_danger_status_warning">شما در حال ارسال یک پیام هشدار برای مراقبان خود هستید. آیا از ارسال پیام اطمینان دارید؟</string>
 
-  <string name="no_contact_exist">هیچ مخاطبی برای مراقبی وجود ندارد</string>
+  <string name="no_contact_exist">هیچ مخاطبی پیدا نشد</string>
   <string name="please_wait">لطفاً کمی صبر کنید</string>
 
   <string name="internet_disconnect">اتصال خود به اینترنت را بررسی کنید</string>
