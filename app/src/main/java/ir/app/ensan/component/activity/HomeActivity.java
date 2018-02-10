@@ -15,7 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.telephony.SmsManager;
 import android.view.View;
 import ir.app.ensan.BuildConfig;
 import ir.app.ensan.R;
@@ -56,6 +55,7 @@ public class HomeActivity extends BaseActivity {
   private static final int PERMISSIONS_REQUEST_CALL = 1005;
 
   private static final int SEND_SMS_ACTIVITY_TOKEN = 2018;
+  private static final int SEND_SMS_NOTIFICATION_TOKEN = 2019;
 
   private FragmentManager fragmentManager;
   private FragmentTransaction transaction;
@@ -141,17 +141,17 @@ public class HomeActivity extends BaseActivity {
         String.format(getString(safe ? R.string.safe_description : R.string.in_danger_description),
             SharedPreferencesUtil.loadString(AddUserFragment.USER_NAME_KEY, ""),
             TimeUtil.getFormattedTime(new Date()));
+
+    StringBuilder smsRecipients = new StringBuilder("smsto:");
+
+    for (ContactEntity contactEntity : ContactManager.getInstance(this).getGuardians()) {
+      smsRecipients.append(contactEntity.getPhoneNumber()).append(';');
+    }
+
     try {
-      SmsManager smsManager = SmsManager.getDefault();
-      ArrayList<String> parts = smsManager.divideMessage(text);
-
-      for (ContactEntity contactEntity : ContactManager.getInstance(this).getGuardians()) {
-        smsManager.sendMultipartTextMessage(contactEntity.getPhoneNumber(), null, parts, null,
-            null);
-      }
-
-      SnackUtil.makeSnackBar(this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
-          getString(R.string.your_status_sms_sent), true);
+      Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(smsRecipients.toString()));
+      smsIntent.putExtra("sms_body", text);
+      startActivityForResult(smsIntent, SEND_SMS_NOTIFICATION_TOKEN);
     } catch (Exception ex) {
       ex.printStackTrace();
     }
@@ -512,6 +512,9 @@ public class HomeActivity extends BaseActivity {
 
     if (requestCode == SEND_SMS_ACTIVITY_TOKEN) {
       smsListener.onSmsSent();
+    }
+
+    if (requestCode == SEND_SMS_NOTIFICATION_TOKEN) {
     }
   }
 

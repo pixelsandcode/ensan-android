@@ -105,7 +105,7 @@ public class MainFragment extends BaseFragment {
         if (NetworkUtil.isInternetConnected()) {
           ((HomeActivity) getActivity()).sendNotify(true);
         } else {
-          ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(true);
+          ((HomeActivity) getActivity()).sendStatusMessage(true);
         }
       }
     });
@@ -148,9 +148,9 @@ public class MainFragment extends BaseFragment {
   private void sendWarningNotify(){
     if (NetworkUtil.isInternetConnected()) {
       ((HomeActivity) getActivity()).sendNotify(false);
-      ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
+      ((HomeActivity) getActivity()).sendStatusMessage(false);
     } else {
-      ((HomeActivity) getActivity()).checkSmsPermissionForSendStatus(false);
+      ((HomeActivity) getActivity()).sendStatusMessage(false);
     }
   }
 }
