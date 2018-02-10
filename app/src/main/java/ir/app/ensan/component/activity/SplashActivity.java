@@ -11,6 +11,7 @@ import ir.app.ensan.component.fragment.AddUserFragment;
 import ir.app.ensan.model.network.NetworkRequestManager;
 import ir.app.ensan.model.network.callback.LoginCallback;
 import ir.app.ensan.model.network.response.LoginResponse;
+import ir.app.ensan.util.NetworkUtil;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
 import ir.app.ensan.util.TimeUtil;
@@ -83,6 +84,11 @@ public class SplashActivity extends BaseActivity {
   };
 
   public void loginUser(String phoneNumber) {
+
+    if (!NetworkUtil.isInternetConnected(this,getWindow().getDecorView())){
+      return;
+    }
+
     NetworkRequestManager.getInstance().callLogin(phoneNumber, new LoginCallback() {
       @Override public void onRequestSuccess(Call call, Response response) {
 

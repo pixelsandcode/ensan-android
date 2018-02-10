@@ -37,6 +37,7 @@ import ir.app.ensan.model.network.response.GuardianListResponse;
 import ir.app.ensan.model.network.response.LoginResponse;
 import ir.app.ensan.model.network.response.SignUpResponse;
 import ir.app.ensan.model.network.response.VerificationResponse;
+import ir.app.ensan.util.NetworkUtil;
 import ir.app.ensan.util.SharedPreferencesUtil;
 import ir.app.ensan.util.SnackUtil;
 import ir.app.ensan.util.TimeUtil;
@@ -168,6 +169,11 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   public void sendUserData() {
+
+    if (!NetworkUtil.isInternetConnected(this,getWindow().getDecorView())){
+      return;
+    }
+
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callSignUp(SharedPreferencesUtil.loadString(AddUserFragment.USER_NAME_KEY, ""),
@@ -209,6 +215,11 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   public void loginUser() {
+
+    if (!NetworkUtil.isInternetConnected(this,getWindow().getDecorView())){
+      return;
+    }
+
     login = true;
     showProgressDialog();
     NetworkRequestManager.getInstance()
@@ -247,6 +258,7 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   private void getGuardianList() {
+
     NetworkRequestManager.getInstance().callGuardianList(new AppCallback() {
       @Override public void onRequestSuccess(Call call, Response response) {
         GuardianListResponse guardianListResponse = (GuardianListResponse) response.body();
@@ -284,6 +296,11 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   public void sendGuardianData(AddGuardianRequest addGuardianRequest) {
+
+    if (!NetworkUtil.isInternetConnected(this,getWindow().getDecorView())){
+      return;
+    }
+
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callAddGuardian(addGuardianRequest, new AddGuardianCallback() {
@@ -333,6 +350,11 @@ public class AddGuardianActivity extends BaseActivity {
   }
 
   public void sendVerifyRequest(String pin) {
+
+    if (!NetworkUtil.isInternetConnected(this,getWindow().getDecorView())){
+      return;
+    }
+
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callVerify(pin, SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),

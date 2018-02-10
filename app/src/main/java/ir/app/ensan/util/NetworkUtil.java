@@ -5,6 +5,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.view.View;
 import ir.app.ensan.EnsanApp;
 import ir.app.ensan.model.network.ServiceGenerator;
 import ir.app.ensan.model.network.response.BaseResponse;
@@ -23,6 +24,15 @@ import retrofit2.Converter;
 public class NetworkUtil {
 
   public static final String AUT_KEY = "authorization_key";
+
+  public static boolean isInternetConnected(Context context, View view) {
+    if (isInternetConnected()) {
+      return true;
+    } else {
+      SnackUtil.makeNetworkDisconnectSnackBar(context, view);
+      return false;
+    }
+  }
 
   public static boolean isInternetConnected() {
     ConnectivityManager cm = (ConnectivityManager) EnsanApp.getAppContext()

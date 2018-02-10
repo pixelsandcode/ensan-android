@@ -86,8 +86,8 @@ public class HomeActivity extends BaseActivity {
 
     smsListener = new SmsListener() {
       @Override public void onSmsSent() {
-        SnackUtil.makeSnackBar(HomeActivity.this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
-            getString(R.string.contact_sms_sent), true);
+        //SnackUtil.makeSnackBar(HomeActivity.this, getWindow().getDecorView(), Snackbar.LENGTH_LONG,
+        //    getString(R.string.contact_sms_sent), true);
         ContactManager.getInstance(HomeActivity.this).saveContacts();
         onBackPressed();
       }
@@ -253,6 +253,11 @@ public class HomeActivity extends BaseActivity {
   }
 
   public void sendGuardianData(AddGuardianRequest addGuardianRequest) {
+
+    if (!NetworkUtil.isInternetConnected(this,getWindow().getDecorView())){
+      return;
+    }
+
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callAddGuardian(addGuardianRequest, new AddGuardianCallback() {
@@ -301,6 +306,11 @@ public class HomeActivity extends BaseActivity {
   }
 
   public void loginUser(final Requests requests) {
+
+    if (!NetworkUtil.isInternetConnected(this,getWindow().getDecorView())){
+      return;
+    }
+
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),

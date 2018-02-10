@@ -177,6 +177,11 @@ public class GuardianListFragment extends BaseFragment {
   }
 
   public void loginUser() {
+
+    if (!NetworkUtil.isInternetConnected(getActivity(),mainView)){
+      return;
+    }
+
     showProgressDialog();
     NetworkRequestManager.getInstance()
         .callLogin(SharedPreferencesUtil.loadString(AddUserFragment.PHONE_NUMBER_KEY, ""),
