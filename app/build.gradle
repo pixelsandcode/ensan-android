@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 def versionMajor = 1
 def versionMinor = 3
-def versionPatch = 1
+def versionPatch = 2
 def versionBuild = 0
 
 android {
@@ -55,7 +55,7 @@ dependencies {
   compile "com.google.firebase:firebase-core:${GOOGLE_FIREBASE_VERSION}"
   compile "com.google.firebase:firebase-messaging:${GOOGLE_FIREBASE_VERSION}"
   compile "com.google.firebase:firebase-crash:${GOOGLE_FIREBASE_VERSION}"
-  compile 'com.google.android.gms:play-services-location:10.2.4'
+  compile "com.google.android.gms:play-services-location:${GOOGLE_FIREBASE_VERSION}"
   compile 'io.nlopez.smartlocation:library:3.2.7'
 
   compile "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
